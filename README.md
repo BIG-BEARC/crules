@@ -34,6 +34,7 @@
 | `agents/` | `.claude/agents/` |
 | `memory/` | `.claude/memory/` |
 | `commands/` | `.claude/commands/` |
+| `docs/` | **不复制**——评审 / 重构方案 / CHANGELOG 属 crules 仓库自身的维护资产，消费项目无需 |
 
 ---
 
@@ -49,7 +50,7 @@
 | `记忆库体系.md`（含 `business-rules.md` / `INVARIANTS.md` 约束载体） | 大项目代码索引 / 约束外化 | 重度 |
 | `插件工作流.md` | 装了 superpowers / spec-kit | 任意 |
 
-**精髓**：`CLAUDE.md` 零依赖、单独可用；进阶全装但门控默认关，零负担。
+**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计实测 ≈4–5k token）；进阶全装但门控默认关，用到才开。
 
 ---
 
@@ -66,7 +67,7 @@
 | `进阶/方案评审闭环.md` | 大需求方案评审：独立第三方 agent 审方案（实施**前**），与代码审查（实施**后**）区分；角色四分、7 步闭环、循环守卫 | 大需求方案评审时 |
 | `进阶/插件工作流.md` | superpowers / spec-kit 与本包工作流的 skill 映射；两者重叠选一个为主或混搭 | 装了插件时 |
 | `agents/` | 各角色 agent 描述（启用 Agent 编排时的配套资源） | 用 Agent 编排时 |
-| `memory/` | 记忆库目录框架：`business-rules.md`（业务规则·软约束）/ `INVARIANTS.md`（技术不变量·硬约束）/ `patterns.md` / `indexes/` / `decisions/` | 用记忆库时 |
+| `memory/` | 记忆库目录框架：`NAVIGATION.md`（导航入口）/ `MAINTENANCE.md`（自动维护规则）/ `patterns.md` / `business-rules.md`（业务规则·软约束）/ `INVARIANTS.md`（技术不变量·硬约束）；`indexes/`、`decisions/` 为启用记忆库后按需创建（NAVIGATION 中为占位示例） | 用记忆库时 |
 | `commands/` | slash 命令：`crules-init`（一键初始化新/老项目）/ `update-memory`（重建代码索引）/ `review-review`（独立第三方审评审文档） | 装为 Claude Code 命令时 |
 
 ---

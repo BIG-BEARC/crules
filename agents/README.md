@@ -12,7 +12,7 @@
 | Agent | 职责一句话 | 任务难度 |
 |---|---|---|
 | [`error.md`](error.md) | 运行时错误、崩溃、编译异常排查（频繁 reset） | 中 |
-| [`reviewer.md`](reviewer.md) | 代码 Review、质量检查、安全审计（实施**后**） | 高 |
+| [`reviewer.md`](reviewer.md) | 代码 Review、质量检查、安全审计（实施**后**，只报不改） | 高 |
 | [`plan-reviewer.md`](plan-reviewer.md) | 方案评审（实施**前**，独立第三方，只读） | 中 |
 
 > 模型档位按「任务难度」选型，不写死——难度越高用越强模型。具体选型由调用方决定。

@@ -5,6 +5,32 @@
 
 ---
 
+## 08-14 · v26 续（复核微修 M1-M3）
+
+- **`docs/评审.md`**：两处「v18 复盘」段文字指针改指 `archive/详情-v16-v25.md`（M1，归档后未同步的悬空指针）+「715→135 行」行数口径修正为「精简至 135 行」（M2）
+- **`commands/crules-init.md`** + **`README.md`**：常驻成本口径补「+ `项目附录.md` 合计 ≈4–5k token」（M3）
+
+## 08-14 · v26 外审落地（E1 诚实化 + trivial 批量 + 归档）
+
+- **`README.md`**：「精髓」行措辞诚实化（写明根 `CLAUDE.md` 常驻 ≈4–5k token，E1 定案）；复制目标路径表加 `docs/`「不复制」行（N3）；文件清单 memory/ 行改列实存文件（N2）
+- **`进阶/Agent编排.md`**：「可用 Agent 模板」拆「通用角色 / 技术栈专属角色」两表（E2），reviewer 行补「只报不改」
+- **`commands/crules-init.md`**：「全装零负担」改为常驻成本说明（E1 连带）
+- **`memory/README.md`** + **`进阶/记忆库体系.md`**：「不进 git」表述补「消费项目运行时 vs crules 源仓库模板」语境（N6）
+- **`docs/archive/详情-v16-v25.md` 新增**：评审.md v16-v25 九段详情归档，评审.md 精简至 135 行（N7 / v24-C2 止损执行）
+
+## 08-14 · v25 落地（reviewer 只报不改）
+
+- **`agents/reviewer.md`**：tools 锁 `Read, Glob, Grep`（去 Bash/Edit/Write）+ 纪律首条「只报不改（硬约束）」+ 工作流改「输出清单→主控上报→需求方裁决→主控修复→reviewer 只读复读」（D7 修复，全包唯一审查独立性缺口）
+- **`进阶/方案评审闭环.md`** 核心区分表 + **`agents/README.md`** 速查表同步「只报不改」
+- （本轮漏记 CHANGELOG，v26-N8 补记）
+
+## 08-13 · v23 外审落地（3 项 trivial）
+
+- **`CLAUDE.md` §四**：证据尺度泛化——「模拟器/真机证据」→「测试环境/目标环境证据」（移动端术语降为括注示例）+ 重映射说明；`进阶/工程化流程.md` §7 交付汇报模板同步
+- **`agents/error.md`**：frontmatter 补 `tools: Read, Glob, Grep, Bash, Edit, Write`
+- **`docs/archive/重构方案-v20-skills.md`**：v20 方案文档归档（已废弃），7 处引用改 archive/ 路径
+- （本轮漏记 CHANGELOG，v26-N8 补记）
+
 ## 08-12 · v18 复盘落地（hooks 方案撤销，纯文档修正）
 
 - **`CLAUDE.md` 两处改**：①§二 提交策略「绿灯即 commit」误述改精确描述（superpowers 是 finishing-branch 选选项后执行，非绿灯即；冲突真实存在=触发点不同，crules §二 优先级链覆盖）②删顶部「版本：v1.1」行（无维护机制=误导）
