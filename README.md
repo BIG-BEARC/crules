@@ -6,10 +6,14 @@
 
 ---
 
-## 怎么用（一条命令）
+## 怎么用（两条命令）
 
 ```bash
-# 在项目根目录跑（crules 已装为 Claude Code 命令时）
+# ① 一次性：装 crules plugin（本地路径源，user scope，不进任何项目 git）
+claude plugin marketplace add ~/Downloads/ai-code/crules --scope user
+claude plugin install crules@crules-market --scope user
+
+# ② 在项目根目录跑（装好 plugin 后任何项目可用）
 /crules-init
 ```
 
@@ -33,8 +37,9 @@
 | `CLAUDE.md` / `项目附录.md` / `进阶/` | 项目根（保持相对路径） |
 | `agents/` | `.claude/agents/` |
 | `memory/` | `.claude/memory/` |
-| `commands/` | `.claude/commands/` |
 | `docs/` | **不复制**——评审 / 重构方案 / CHANGELOG 属 crules 仓库自身的维护资产，消费项目无需 |
+
+> 命令（crules-init / update-memory）**不走 cp**——经 plugin 分发（上方「怎么用」①步），`claude plugin update` 即更新；`review-review` 是 crules 仓库内部命令，在仓库本地 `.claude/commands/`，不随包分发。
 
 ---
 
@@ -68,7 +73,7 @@
 | `进阶/插件工作流.md` | superpowers / spec-kit 与本包工作流的 skill 映射；两者重叠选一个为主或混搭 | 装了插件时 |
 | `agents/` | 各角色 agent 描述（启用 Agent 编排时的配套资源） | 用 Agent 编排时 |
 | `memory/` | 记忆库目录框架：`NAVIGATION.md`（导航入口）/ `MAINTENANCE.md`（自动维护规则）/ `patterns.md` / `business-rules.md`（业务规则·软约束）/ `INVARIANTS.md`（技术不变量·硬约束）；`indexes/`、`decisions/` 为启用记忆库后按需创建（NAVIGATION 中为占位示例） | 用记忆库时 |
-| `commands/` | slash 命令：`crules-init`（一键初始化新/老项目）/ `update-memory`（重建代码索引）/ `review-review`（独立第三方审评审文档） | 装为 Claude Code 命令时 |
+| `commands/` | 2 个 slash 命令（均 `disable-model-invocation`，显式发起）：`crules-init`（初始化新/老项目）/ `update-memory`（重建代码索引）——**经 plugin 分发**，不随 cp 走 | 装为 Claude Code plugin 时 |
 
 ---
 

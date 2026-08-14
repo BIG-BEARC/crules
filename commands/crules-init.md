@@ -1,5 +1,6 @@
 ---
 description: 初始化 crules——检测新/老项目，自动全装模板 + 引导填附录（新项目）或合并规则（老项目，禁静默覆盖）
+disable-model-invocation: true
 ---
 
 # /crules-init
@@ -15,9 +16,9 @@ description: 初始化 crules——检测新/老项目，自动全装模板 + �
 
 ### 0. 定位 crules 源
 
-确定 crules 模板包根目录（本命令的来源）。AI 从本命令的安装来源推断，或问需求方 crules 模板包路径（如 `~/Downloads/ai-code/crules`）。找不到则提示需求方指定后停止。
+本命令随 crules plugin 分发，模板源在 plugin cache（固定路径 `~/.claude/plugins/cache/crules-market/crules/<version>/`）。AI 优先用 `ls ~/.claude/plugins/cache/crules-market/crules/` 取当前版本目录；cache 不存在（如手动 cp 部署）则问需求方 crules 模板包路径（如 `~/Downloads/ai-code/crules`）。找不到则提示需求方指定后停止。
 
-> **代价说明**：本命令复制到目标项目后即与源脱钩，运行时无固定机制（如环境变量）反查源路径——**每次需问需求方**。这是刻意的（模板包「复制即脱钩」定位；引 `CRULES_HOME` 治标且违背 v15 减负）。未来若有更好机制（命令内置源探测 / 符号链接）再补。
+> **分工说明**（plugin 化后）：本命令与 `/update-memory` 等能力经 `/plugin install crules` 分发；本命令只负责把**规则文档**（CLAUDE.md / 项目附录 / 进阶 / agents / memory）cp 或合并到消费项目——能力不重复 cp。
 
 ### 1. 检测新/老项目
 
@@ -29,13 +30,12 @@ description: 初始化 crules——检测新/老项目，自动全装模板 + �
 ### 2a. 新项目分支（全装）
 
 1. 问技术栈（纯通用 / Flutter / 其他）→ 若 Flutter，提示同时装 `../flutter/`（App 或 Plugin 模板）
-2. **全装**（进阶门控默认关，用到才开——不必选规模删文件）：
+2. **全装规则文档**（进阶门控默认关，用到才开——不必选规模删文件；能力已随 plugin 安装，不重复 cp）：
    - `cp crules/CLAUDE.md` → 项目根 `CLAUDE.md`
    - `cp crules/项目附录.md` → 项目根 `项目附录.md`
    - `cp -r crules/进阶` → 项目根 `进阶/`
    - `cp -r crules/agents` → 项目根 `.claude/agents/`
    - `cp -r crules/memory` → 项目根 `.claude/memory/`
-   - `cp -r crules/commands` → 项目根 `.claude/commands/`
 3. 引导填 `项目附录.md` 的 **3 个必填**（项目名 / 技术栈 / 构建·分析·测试命令）
 4. 提示：进阶篇按「启用条件」门控自开，默认不影响；记忆库启用时按 `CLAUDE.md` §七 加会话级声明
 
@@ -43,7 +43,7 @@ description: 初始化 crules——检测新/老项目，自动全装模板 + �
 
 > ⚠️ 两个坑都要防：
 > - **规则冲突**（如 crules「人工提交」vs 老项目「自动提交」）—— 体检必须显式列冲突
-> - **资产覆盖**（老项目自己的 `.claude/agents|memory|commands` 被 `cp -r` 吞掉）—— 进阶/agents/memory/commands 也要体检，**逐个取舍**，不是一把 `cp -r`
+> - **资产覆盖**（老项目自己的 `.claude/agents|memory` 被 `cp -r` 吞掉）—— 进阶/agents/memory 也要体检，**逐个取舍**，不是一把 `cp -r`
 >
 > **禁静默覆盖是整个老项目分支的最高纪律**——既适用于 CLAUDE.md，也适用于 .claude/ 下的资产。
 
@@ -54,10 +54,10 @@ description: 初始化 crules——检测新/老项目，自动全装模板 + �
 2. **取舍 CLAUDE.md**：需求方逐条定——保留老的 / 用 crules 的 / 融合（融合写明怎么融）
 3. **合并 CLAUDE.md**：据取舍生成合并 `CLAUDE.md`（老规则在前 + crules 纪律，冲突按取舍）；取舍记录落 `.claude/memory/decisions/`（为何保留 / 为何用 crules）
 4. **附录对齐**：把老项目实际信息（技术栈 / 命令 / 红线）填进 `项目附录.md`，不重复造
-5. **进阶 / agents / memory / commands 体检合并**（**不是** `cp -r` 一把梭）：
+5. **进阶 / agents / memory 体检合并**（**不是** `cp -r` 一把梭）：
    - **进阶/**：老项目若已有 `进阶/` 同名文件 → 同 CLAUDE.md 流程（体检→取舍→合并），冲突落 `decisions/`；无则直接复制
-   - **`.claude/agents|memory|commands`**：老项目若已有同名 → **默认保留老项目的**（那是该项目的真资产），crules 的同名文件作为参考并排（如 `crules-plan-reviewer.md`）或按需求方取舍；**禁止覆盖老项目既有文件**。无则直接复制
-   - 老项目无 `.claude/` 目录时，方可 `cp -r` crules 的 agents/memory/commands（无冲突 = 安全）
+   - **`.claude/agents|memory`**：老项目若已有同名 → **默认保留老项目的**（那是该项目的真资产），crules 的同名文件作为参考并排（如 `crules-plan-reviewer.md`）或按需求方取舍；**禁止覆盖老项目既有文件**。无则直接复制
+   - 老项目无 `.claude/` 目录时，方可 `cp -r` crules 的 agents/memory（无冲突 = 安全）；commands 不 cp（能力经 plugin 分发）
 
 ### 3. 收尾
 

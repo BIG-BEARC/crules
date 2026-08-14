@@ -5,6 +5,14 @@
 
 ---
 
+## 08-14 · v29 执行 v22 plugin 化（能力上线 plugin）
+
+- **`.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`** 新增——crules plugin（本地路径源，user scope）
+- **`commands/crules-init.md`** + **`commands/update-memory.md`**：frontmatter 加 `disable-model-invocation: true`；crules-init 步骤 0 改 plugin cache 定位源（CRULES_HOME 终结）、2a/2b 适配分工（不再 cp commands）
+- **`commands/review-review.md` → `.claude/commands/`**（移动）：仓库内部命令不进 plugin（plugin 收录 commands/ 全部 .md）
+- **`agents/README.md` 删除**（N9）：plugin 把它收录为伪 agent；链接孤儿，内容已被 Agent编排 / 根 README / 角色卡覆盖
+- **`README.md`**：「怎么用」改两条命令（装 plugin + /crules-init）；复制表与文件清单的 commands 行改 plugin 分发说明
+
 ## 08-14 · v28 裁决落地（R1 收口 + E4 硬护栏 + E3 + N1）
 
 - **`commands/crules-init.md`**：老项目分支新增步骤 0 硬护栏——git 干净树检查 + 时间戳备份（E4：「禁静默覆盖」从纯 prompt 升级为硬护栏）

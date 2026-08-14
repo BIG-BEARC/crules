@@ -174,12 +174,11 @@ claude plugin install crules@crules-market --scope user
 
 | 项 | 状态 |
 |---|---|
-| plugin 命名空间 + skill 发现 + command/skill 并存 + disable-model-invocation | ✅ v22 实测通过 |
-| `claude plugin update` 同步链路 | ⚠️ 未实测，落地验证 |
-| crules-init 从 plugin cache 定位源（解 CRULES_HOME） | ⚠️ 设计推断，cache 版本路径定位待验证 |
-| command 的 slash 调用形态（带不带 `crules:` 前缀） | ⚠️ 未实测，落地确认 |
-| review-review A 选项在真实消费项目不误触发 | ⚠️ 待消费项目出现后观察 |
-| skill 主动触发可靠性（description 写得好才恰当触发） | ⚠️ 长期观察 + 迭代 description 措辞 |
+| plugin 命名空间 + command 发现 + disable-model-invocation | ✅ v22 实测通过 |
+| `claude plugin update` 同步链路 | ✅ v29 实测通过（删 `agents/README.md` → update → 伪 agent 消失） |
+| crules-init 从 plugin cache 定位源（解 CRULES_HOME） | ✅ v29 实测 cache 路径 `~/.claude/plugins/cache/crules-market/crules/<version>/` 成立 |
+| command 的 slash 调用形态（带不带 `crules:` 前缀） | ⚠️ 未实测，待真实会话敲命令确认 |
+| review-review 隔离 | ✅ v28 决议不进 plugin + v29 移至仓库本地 `.claude/commands/`（原 A 选项废弃） |
 
 ---
 

@@ -1,5 +1,6 @@
 ---
 description: 触发 .claude/memory/ 全量刷新（对比源码现状，增量更新所有索引）
+disable-model-invocation: true
 ---
 
 # /update-memory
