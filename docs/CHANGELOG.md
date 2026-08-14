@@ -19,6 +19,14 @@
 - **`进阶/插件工作流.md`**：spec-kit 列标「⚠️ 实验性，未经本包实测」，说明段区分 superpowers（已实测）/ spec-kit（待实测）（E3）
 - **`docs/重构方案-v22-plugin.md`**：按 v28 裁决修订——review-review 不进 plugin（留仓库本地）、update-memory 改 command（+`disable-model-invocation`）、plugin 清单旧名改 crules（N1）；R1 收口，v22 主线可执行
 
+## 08-14 · v36 外审裁定落地（脚本 F/G 查 + pending-updates 漂移队列）
+
+- **`scripts/check-consistency.sh`** +两查：F 跨包链接（规范化后越出包根即报，v18-D 5 文件豁免）——治「源仓库通过、分发场景失明」盲区；G 双 json 版本号一致性
+- **`hooks/pending-updates.py`** 新增 + **`hooks/hooks.json`** 加 PostToolUse（Edit/Write/NotebookEdit）——记忆库启用项目改源文件自动记 `.claude/memory/.pending-updates` 漂移队列（flock 防并发），「记得更新索引」从记忆问题变成看得见的待办
+- **`memory/MAINTENANCE.md`** 自检清单加队列首条；**`进阶/记忆库体系.md`** 维护时机 4 补队列提示
+- **`.claude-plugin/`** 版本 0.1.4→0.1.6（0.1.5 首发 + flock 修复）
+- 外审图评裁定：P0-2/P1-2/P1-3 采纳落地；P1-1 数字驳回（实测 31 行 / 3967 汉字，README 4-5k 恰准），优先级标注缓议待真实消费驱动
+
 ## 08-14 · v35 deny-list hook（首条机制级硬约束，三草案收口）
 
 - **`hooks/hooks.json` + `hooks/deny-list.py`** 新增——PreToolUse 破坏性命令硬闸，随 plugin 分发零配置：拦 `git push --force`（--force-with-lease 放行）/ `push --delete` / `reset --hard` / `clean -f` / `branch -D` / `checkout -- .` / `restore .` / `rm 递归+强制`（/tmp 放行）；零意图判断、deny-by-default（v18-A 撤销边界外窄范围重开）

@@ -42,4 +42,22 @@ git -c core.quotePath=off ls-files '*.md' | while IFS= read -r f; do
   done
 done
 
+echo "== F. 跨包相对链接（规范化后越出包根即报；v18-D 已知豁免清单内静默）=="
+# 越包 = 链接从所在文件目录规范化后逃出 crules 包根（如 进阶/ 的 ../../flutter）——分发/消费后必断
+# 包内合法 = ../CLAUDE.md（进阶/ 的上一级恰是包根）。豁免：v18-D 暂缓项涉及的 5 文件（重启时清单）
+KNOWN_F=':README.md:进阶/审查与复核纪律.md:进阶/工程化流程.md:进阶/Agent编排.md:memory/NAVIGATION.md:'
+lsmd | while IFS= read -r f; do
+  case "$KNOWN_F" in *":$f:"*) continue;; esac
+  dir=$(dirname "$f")
+  grep -oE '\]\([^)#]+\.md' "$f" 2>/dev/null | sed 's/](//' | while IFS= read -r link; do
+    esc=$(python3 -c "import os; p=os.path.normpath(os.path.join('$dir','$link')); print('ESCAPE' if p.startswith('..') else '')" 2>/dev/null)
+    [ -n "$esc" ] && echo "  越包: $f → $link"
+  done
+done
+
+echo "== G. plugin 版本号一致（双 json 手工同步防漂移）=="
+v1=$(python3 -c 'import json;print(json.load(open(".claude-plugin/plugin.json"))["version"])' 2>/dev/null)
+v2=$(python3 -c 'import json;print(json.load(open(".claude-plugin/marketplace.json"))["plugins"][0]["version"])' 2>/dev/null)
+[ -n "$v1" ] && [ "$v1" = "$v2" ] || echo "  版本不一致: plugin.json=$v1 marketplace.json=$v2"
+
 echo "== 完成（以上无输出项 = 通过）=="
