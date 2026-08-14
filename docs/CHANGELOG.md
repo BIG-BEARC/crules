@@ -5,9 +5,21 @@
 
 ---
 
+## 08-14 · v28 裁决落地（R1 收口 + E4 硬护栏 + E3 + N1）
+
+- **`commands/crules-init.md`**：老项目分支新增步骤 0 硬护栏——git 干净树检查 + 时间戳备份（E4：「禁静默覆盖」从纯 prompt 升级为硬护栏）
+- **`进阶/插件工作流.md`**：spec-kit 列标「⚠️ 实验性，未经本包实测」，说明段区分 superpowers（已实测）/ spec-kit（待实测）（E3）
+- **`docs/重构方案-v22-plugin.md`**：按 v28 裁决修订——review-review 不进 plugin（留仓库本地）、update-memory 改 command（+`disable-model-invocation`）、plugin 清单旧名改 crules（N1）；R1 收口，v22 主线可执行
+
+## 08-14 · v27 复盘（M1-M3 裁定 + 归档）
+
+- **`docs/评审.md`**：v26 详情段归档；Changelog +v27；「精简至 135 行」瞬时数字按 M2 原则抹除；v25 未登记产出行补「口径查证再次受阻」注
+- **`docs/archive/详情-v16-v25.md` → `详情-v16-v26.md`**（更名）：追加 v26 详情段，全部引用同步（grep 旧名零残留）
+- 裁定结论：M1 全对 / M2 建议采纳·事实指控驳回 / M3 对——详见 评审.md v27 段
+
 ## 08-14 · v26 续（复核微修 M1-M3）
 
-- **`docs/评审.md`**：两处「v18 复盘」段文字指针改指 `archive/详情-v16-v25.md`（M1，归档后未同步的悬空指针）+「715→135 行」行数口径修正为「精简至 135 行」（M2）
+- **`docs/评审.md`**：两处「v18 复盘」段文字指针改指 `archive/详情-v16-v26.md`（M1，归档后未同步的悬空指针）+「715→135 行」行数口径修正为「精简至 135 行」（M2）
 - **`commands/crules-init.md`** + **`README.md`**：常驻成本口径补「+ `项目附录.md` 合计 ≈4–5k token」（M3）
 
 ## 08-14 · v26 外审落地（E1 诚实化 + trivial 批量 + 归档）
@@ -16,7 +28,7 @@
 - **`进阶/Agent编排.md`**：「可用 Agent 模板」拆「通用角色 / 技术栈专属角色」两表（E2），reviewer 行补「只报不改」
 - **`commands/crules-init.md`**：「全装零负担」改为常驻成本说明（E1 连带）
 - **`memory/README.md`** + **`进阶/记忆库体系.md`**：「不进 git」表述补「消费项目运行时 vs crules 源仓库模板」语境（N6）
-- **`docs/archive/详情-v16-v25.md` 新增**：评审.md v16-v25 九段详情归档，评审.md 精简至 135 行（N7 / v24-C2 止损执行）
+- **`docs/archive/详情-v16-v26.md` 新增**：评审.md v16-v25 九段详情归档，评审.md 恢复单段详情精简形态（N7 / v24-C2 止损执行）
 
 ## 08-14 · v25 落地（reviewer 只报不改）
 

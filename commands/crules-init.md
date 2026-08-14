@@ -47,6 +47,9 @@ description: 初始化 crules——检测新/老项目，自动全装模板 + �
 >
 > **禁静默覆盖是整个老项目分支的最高纪律**——既适用于 CLAUDE.md，也适用于 .claude/ 下的资产。
 
+0. **硬护栏（动手前必做，E4）**：
+   - **git 干净树检查**：项目是 git 仓库时先跑 `git status`，工作树不干净 → 提示需求方先 commit / stash 再继续（保证合并改动可 `git diff` 审阅、`git restore` 回退）
+   - **时间戳备份**：`cp CLAUDE.md CLAUDE.md.bak.$(date +%Y%m%d%H%M%S)`；`.claude/` 下将被触及的同名资产，同样**先备份再动**
 1. **体检 CLAUDE.md 冲突**：读老 `CLAUDE.md` + crules `CLAUDE.md`，列**冲突条款**（提交策略 / 双 Gate / 验证证据 / 不虚构 / 范围边界 / 敏感数据等），逐条标「仅老项目有 / 仅 crules 有 / 双方都有但不同」
 2. **取舍 CLAUDE.md**：需求方逐条定——保留老的 / 用 crules 的 / 融合（融合写明怎么融）
 3. **合并 CLAUDE.md**：据取舍生成合并 `CLAUDE.md`（老规则在前 + crules 纪律，冲突按取舍）；取舍记录落 `.claude/memory/decisions/`（为何保留 / 为何用 crules）
@@ -66,7 +69,7 @@ description: 初始化 crules——检测新/老项目，自动全装模板 + �
 
 - 模板包结构：`crules/README.md`「文件清单」
 - 门控原则：进阶篇「启用条件」自门控，默认不开
-- 老项目合并纪律：禁静默覆盖（对应 `CLAUDE.md`「先读后改」「风险操作先确认」「守住范围边界」）
+- 老项目合并纪律：禁静默覆盖（对应 `CLAUDE.md`「先读后改」「风险操作先确认」「守住范围边界」）；硬护栏（git 干净树 + 时间戳备份）见步骤 2b.0
 
 ## 注意
 

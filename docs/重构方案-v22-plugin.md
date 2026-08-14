@@ -1,6 +1,8 @@
 # 重构方案 v22 · crules plugin 化（定案）
 
 > 本方案是 v20「裸 skill 方案」经 v21 评审 + v22 plugin 实测后的**定案修订**。裸 skill 方案已放弃（见 [`archive/重构方案-v20-skills.md`](archive/重构方案-v20-skills.md) 顶部废弃标注）。本轮定案未动 `commands/` 源文件，属待执行方案。
+>
+> **v28 决议修订（08-14，需求方裁决 R1 收口）**：① `review-review` **不进 plugin**——只服务 crules 仓库自身（审 `docs/评审.md`），留仓库本地 `.claude/commands/`；② `update-memory` **改 command**（原案 skill 与「兜底全量刷新·显式发起」定位矛盾，三分法统一为显式 command + `disable-model-invocation`）；③ plugin.json/marketplace.json 旧名已改 crules（N1）。下文已按此更新。
 
 ---
 
@@ -24,7 +26,8 @@ crules 的资产分两类，plugin 化后由不同机制处理：
 
 | 资产 | 形态 | 谁负责分发 |
 |---|---|---|
-| **能力**（crules-init / update-memory / review-review） | skill / command | **plugin 机制**（`/plugin install`，带 `crules:` 命名空间） |
+| **能力**（crules-init / update-memory） | command（均显式发起） | **plugin 机制**（`/plugin install`，带 `crules:` 命名空间） |
+| **仓库内部工具**（review-review） | command | **不进 plugin**——crules 仓库本地 `.claude/commands/`（v28 决议：受众仅本仓库，消费项目不装） |
 | **规则文档**（CLAUDE.md / agents/ / memory/ / 进阶/ / 项目附录） | 常驻上下文文件 | **crules-init command**（cp/合并到消费项目根——这些不是 skill，plugin 不自动"装"到项目根） |
 
 **为什么规则文档仍要 cp**：消费项目的 Claude 要把 CLAUDE.md/agents/memory 当**常驻上下文**读（每次会话加载），它们必须是消费项目里的实际文件，不是 plugin 里的命名空间能力。plugin 管"能力分发"，crules-init 管"规则文档本地化"，两者分工。
@@ -38,28 +41,26 @@ crules/
 ├─ .claude-plugin/
 │  ├─ plugin.json              # plugin 清单
 │  └─ marketplace.json         # 本地 marketplace（source: "./"，self-hosted）
-├─ skills/                     # 模型主动触发的能力
-│  ├─ update-memory/
-│  │  └─ SKILL.md
-│  └─ review-review/
-│     └─ SKILL.md
-├─ commands/                   # 用户显式发起的能力
-│  └─ crules-init.md           # （update-memory.md / review-review.md 已迁出）
+├─ commands/                   # 用户显式发起的能力（v28：统一 command，无 skills/）
+│  ├─ crules-init.md
+│  └─ update-memory.md
 ├─ CLAUDE.md / agents/ / memory/ / 进阶/ / 项目附录.md   # 规则文档（不变，crules-init cp 它们）
 └─ docs/ ...
 ```
+
+> `review-review.md` 留在 `commands/` 作模板源，**不进 plugin 分发**；crules 仓库自己的 `.claude/commands/` 放一份供本仓库使用（v28 决议）。
 
 三分法从"部署位置"改为"触发形态"：
 
 | 能力 | 形态 | 触发 | 解决的问题 |
 |---|---|---|---|
 | `crules-init` | **command** | 显式（`disable-model-invocation: true`） | 解 P2（不主动推销） |
-| `update-memory` | **skill** | 模型主动 | 索引同步，适时触发 |
-| `review-review` | **skill** | 模型主动（description 限定） | 复审（A 选项隔离消费项目） |
+| `update-memory` | **command** | 显式（`disable-model-invocation: true`） | 兜底全量刷新·显式发起（v28：贯彻三分法，R1 收口） |
+| `review-review` | **不进 plugin**（仓库本地） | 显式 | 受众=crules 仓库自身，消费项目不装（v28：消除"死命令装活位置"） |
 
 ---
 
-## 三、三个能力的 frontmatter（修正 P1/P2 + A）
+## 三、两个能力的 frontmatter（修正 P1/P2；v28 收口 R1）
 
 ### 1. crules-init（command，解 P2）
 
@@ -73,30 +74,24 @@ disable-model-invocation: true
 - `disable-model-invocation: true`（实测验证有效）= 模型不主动触发，只用户敲 → **解 P2 误推销**
 - 正文：迁移自现 `commands/crules-init.md`，但步骤 0「定位源」改为**从 plugin cache 读**（见第六节，解 v15 CRULES_HOME）
 
-### 2. update-memory（skill，修 P1）
+### 2. update-memory（command，v28 决议改形态）
 
 ```yaml
 ---
-name: update-memory
-description: Trigger a full refresh of the project's .claude/memory/ code index — rescans source against the NAVIGATION index, updates file lists, prunes stale entries, fixes reuse hints. Use as a fallback when the index is broadly stale (long inactivity or batch refactoring). This is an index-sync tool, NOT for sedimenting rules — business rules/invariants go in business-rules.md/INVARIANTS.md via the normal discipline.
+description: 对 .claude/memory/ 做全量兜底刷新——对比源码现状，增量更新所有索引。长时间未维护或批量重构后索引大面积失效时使用。索引同步工具，不用于沉淀规则（业务规则/不变量走 business-rules.md/INVARIANTS.md 常规纪律）。
+disable-model-invocation: true
 ---
 ```
 
-- description 改回**真实语义「索引同步」**（P1 修正），明确 `NOT for sedimenting rules`
-- 正文：迁移自现 `commands/update-memory.md`（原命令自定位「兜底工具」，保留）
+- description 保持**真实语义「索引同步」**（P1 修正沿用），明确不用于沉淀规则
+- **v28 改 skill → command**：原案 skill（模型主动）与正文自定位「兜底工具·显式发起」矛盾（R1）；改 command + `disable-model-invocation: true`，与 crules-init 标准统一
+- 正文：`commands/update-memory.md` 原文基本不动（本就按显式命令写）
 
-### 3. review-review（skill，A 选项）
+### 3. review-review（不进 plugin，v28 决议）
 
-```yaml
----
-name: review-review
-description: Use ONLY when the project contains a decision/review tracking document like the crules repo's own docs/评审.md. Dispatches an isolated-context subagent to audit decision soundness, dogfooding consistency, and whether documented discipline actually landed (not just written). Consumer projects without such a tracking doc will not trigger this.
----
-```
-
-- **A 选项**：description 写死「仅当项目存在评审追踪文档时」→ 消费项目（无 `评审.md`）Claude 不主动触发
-- 代价：消费项目仍占 ~20 tok/session 闲置，但不会误触发；可接受
-- 升级路径：若未来消费项目多且闲置困扰，再拆 `crules` / `crules-dev` 两 plugin（B 选项）
+- **原 A 选项（skill + description 软门控）废弃**——与 P2 硬开关标准不统一（R1），且消费项目闲置 ~20 tok/session 无意义
+- **改为**：不进 plugin 分发；`commands/review-review.md` 留作模板源，crules 仓库自己的 `.claude/commands/` 放一份（受众=本仓库，审 `docs/评审.md`）
+- 消费项目完全不装 → 「死命令装活位置」（v19 病）从根上消除
 
 ---
 
@@ -107,7 +102,7 @@ description: Use ONLY when the project contains a decision/review tracking docum
 {
   "name": "crules",
   "version": "0.1.0",
-  "description": "通用项目规则模板包——CLAUDE.md 协作规则 + agents + memory + skills/commands",
+  "description": "crules——CLAUDE.md 协作规则 + agents + memory + skills/commands",
   "author": { "name": "chuxiong" }
 }
 ```
@@ -122,7 +117,7 @@ description: Use ONLY when the project contains a decision/review tracking docum
       "name": "crules",
       "source": "./",
       "version": "0.1.0",
-      "description": "通用项目规则模板包"
+      "description": "crules 项目协作规则模板包"
     }
   ]
 }
@@ -163,15 +158,14 @@ claude plugin install crules@crules-market --scope user
 ## 七、落地步骤
 
 1. crules 仓库补 `.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`
-2. 建 `skills/update-memory/SKILL.md`、`skills/review-review/SKILL.md`（迁移自 commands/，按第三节 frontmatter）
+2. `commands/update-memory.md` 加 `disable-model-invocation: true`（v28：不迁 skills/，原位改 command 形态）
 3. `commands/crules-init.md` 加 `disable-model-invocation: true`（解 P2）；步骤 0 改"从 plugin cache 读源"
-4. 删 `commands/update-memory.md` + `commands/review-review.md`（已迁 skills/）；crules-init 留 commands/
+4. `commands/review-review.md` 留模板源**不进 plugin**；crules 仓库自己的 `.claude/commands/` 放一份（v28 决议）
 5. `marketplace add ~/Downloads/ai-code/crules` + `install crules@crules-market`（user scope）
 6. 新会话验证：
-   - `claude plugin details crules@crules-market` 组件清单 = 2 skill + 1 command
-   - 新会话能见 `crules:update-memory` / `crules:review-review` skill
-   - crules-init command 的 slash 调用形态（`/crules-init` 还是 `/crules:crules-init`）**待确认**
-7. 交叉引用同步（约 6 处）：crules/README.md、记忆库体系.md、memory/README.md、MAINTENANCE.md、crules-init 自身、review-review 自身——把「命令 / cp 到 commands/」改「skill / plugin」
+   - `claude plugin details crules@crules-market` 组件清单 = 2 command（crules-init / update-memory）
+   - 两个 command 的 slash 调用形态（`/crules-init` 还是 `/crules:crules-init`）**待确认**
+7. 交叉引用同步：crules/README.md（commands 行说明 plugin 分发）、记忆库体系.md「维护时机」、MAINTENANCE.md、crules-init 步骤 4——update-memory 的分发描述改 plugin
 8. crules-init 正文 step 2a/2b 调整：消费项目通过 `/plugin install crules` 已装能力，crules-init 只负责 cp/合并**规则文档**（CLAUDE.md/agents/memory/进阶/项目附录）到项目根
 
 ---
@@ -191,4 +185,4 @@ claude plugin install crules@crules-market --scope user
 
 ## 九、一句话
 
-plugin 化不是"用 plugin 替代 skill"，是"把 crules 的能力装进 plugin 容器"——换得 `crules:` 命名空间根治撞名、一键装/卸、`disable-model-invocation` 解 P2、cache 定位解 CRULES_HOME；本地路径源 + user scope 满足纯本地不共享。代价是 review-review 闲置（A 选项 description 隔离，~20 tok 可接受）。
+plugin 化不是"用 plugin 替代 skill"，是"把 crules 的能力装进 plugin 容器"——换得 `crules:` 命名空间根治撞名、一键装/卸、`disable-model-invocation` 解 P2、cache 定位解 CRULES_HOME；本地路径源 + user scope 满足纯本地不共享。v28 收口 R1 后形态更简：**两个显式 command 进 plugin，review-review 留仓库本地，无 skills/**。
