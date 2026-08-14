@@ -13,9 +13,11 @@
 claude plugin marketplace add ~/Downloads/ai-code/crules --scope user
 claude plugin install crules@crules-market --scope user
 
-# ② 在项目根目录跑（装好 plugin 后任何项目可用）
-/crules-init
+# ② 在项目根目录跑（装好 plugin 后任何项目可用；plugin 命令带命名空间，裸名不可用）
+/crules:crules-init
 ```
+
+> `/crules:crules-init` 默认装**轻装模式**：项目根 `CLAUDE.md` 仅数行（`@` 导入 crules 源 + 本项目覆写节），规则更新**下次会话自动生效**、零复制零合并；可选**完整模式**全量 cp（团队多机 / 不依赖本机源路径时选）。进阶 / agents / memory 两种模式都照常复制。
 
 `/crules-init` 自动检测新/老项目：
 
@@ -34,12 +36,13 @@ claude plugin install crules@crules-market --scope user
 
 | 模板内容 | 复制到 |
 |---|---|
-| `CLAUDE.md` / `项目附录.md` / `进阶/` | 项目根（保持相对路径） |
+| `CLAUDE.md` | 轻装模式**不复制**——项目根 CLAUDE.md 仅写 `@` 导入 + 覆写节；完整模式复制到项目根 |
+| `项目附录.md` / `进阶/` | 项目根（保持相对路径） |
 | `agents/` | `.claude/agents/` |
 | `memory/` | `.claude/memory/` |
 | `docs/` | **不复制**——评审 / 重构方案 / CHANGELOG 属 crules 仓库自身的维护资产，消费项目无需 |
 
-> 命令（crules-init / update-memory）**不走 cp**——经 plugin 分发（上方「怎么用」①步），`claude plugin update` 即更新；`review-review` 是 crules 仓库内部命令，在仓库本地 `.claude/commands/`，不随包分发。
+> 命令（crules-init / update-memory）**不走 cp**——经 plugin 分发（上方「怎么用」①步），`claude plugin update` 即更新；`review-review` 是 crules 仓库内部命令，在仓库本地 `.claude/commands/`，不随包分发。**hooks 亦随 plugin 自带**：破坏性命令 deny-list 硬闸（`git push --force` / `reset --hard` / `clean -f` / `branch -D` / `rm -rf` 等，被拦即提示人工执行），消费项目零配置获得。
 
 ---
 
@@ -74,6 +77,7 @@ claude plugin install crules@crules-market --scope user
 | `agents/` | 各角色 agent 描述（启用 Agent 编排时的配套资源） | 用 Agent 编排时 |
 | `memory/` | 记忆库目录框架：`NAVIGATION.md`（导航入口）/ `MAINTENANCE.md`（自动维护规则）/ `patterns.md` / `business-rules.md`（业务规则·软约束）/ `INVARIANTS.md`（技术不变量·硬约束）；`indexes/`、`decisions/` 为启用记忆库后按需创建（NAVIGATION 中为占位示例） | 用记忆库时 |
 | `commands/` | 2 个 slash 命令（均 `disable-model-invocation`，显式发起）：`crules-init`（初始化新/老项目）/ `update-memory`（重建代码索引）——**经 plugin 分发**，不随 cp 走 | 装为 Claude Code plugin 时 |
+| `hooks/` | **破坏性命令 deny-list 硬闸**（PreToolUse，无意图判断、deny-by-default，被拦即请人工执行）——crules 首条机制级硬约束，随 plugin 分发零配置 | 随 plugin 自动生效 |
 
 ---
 

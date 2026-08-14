@@ -175,9 +175,9 @@ claude plugin install crules@crules-market --scope user
 | 项 | 状态 |
 |---|---|
 | plugin 命名空间 + command 发现 + disable-model-invocation | ✅ v22 实测通过 |
-| `claude plugin update` 同步链路 | ✅ v29 实测通过（删 `agents/README.md` → update → 伪 agent 消失） |
+| `claude plugin update` 同步链路 | ⚠️→✅ **v31 修正**：update 以版本号为键——**同版本号不刷新 cache**（v29「实测通过」实为 `plugin details` 读源，cache 未变）；**每次改 plugin 内容须 bump `plugin.json` + `marketplace.json` 版本号**，update 才落新 cache 目录（v31 实测 0.1.0→0.1.1 ✅） |
 | crules-init 从 plugin cache 定位源（解 CRULES_HOME） | ✅ v29 实测 cache 路径 `~/.claude/plugins/cache/crules-market/crules/<version>/` 成立 |
-| command 的 slash 调用形态（带不带 `crules:` 前缀） | ⚠️ 未实测，待真实会话敲命令确认 |
+| command 的 slash 调用形态（带不带 `crules:` 前缀） | ✅ v34 实测：须用 **`/crules:crules-init`**（裸名 Unknown command）；`-p` 端到端验证命令可执行且行为正确（正确走新项目分支 / 步骤 0 取版本号最大 / 找不到源按纪律停+给选项） |
 | review-review 隔离 | ✅ v28 决议不进 plugin + v29 移至仓库本地 `.claude/commands/`（原 A 选项废弃） |
 
 ---

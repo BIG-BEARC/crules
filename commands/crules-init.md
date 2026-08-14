@@ -16,7 +16,7 @@ disable-model-invocation: true
 
 ### 0. 定位 crules 源
 
-本命令随 crules plugin 分发，模板源在 plugin cache（固定路径 `~/.claude/plugins/cache/crules-market/crules/<version>/`）。AI 优先用 `ls ~/.claude/plugins/cache/crules-market/crules/` 取当前版本目录；cache 不存在（如手动 cp 部署）则问需求方 crules 模板包路径（如 `~/Downloads/ai-code/crules`）。找不到则提示需求方指定后停止。
+本命令随 crules plugin 分发，模板源在 plugin cache（固定路径 `~/.claude/plugins/cache/crules-market/crules/<version>/`）。AI 优先用 `ls ~/.claude/plugins/cache/crules-market/crules/` 取**版本号最大**的目录（多版本并存，旧目录不清理）；cache 不存在（如手动 cp 部署）则问需求方 crules 模板包路径（如 `~/Downloads/ai-code/crules`）。找不到则提示需求方指定后停止。
 
 > **分工说明**（plugin 化后）：本命令与 `/update-memory` 等能力经 `/plugin install crules` 分发；本命令只负责把**规则文档**（CLAUDE.md / 项目附录 / 进阶 / agents / memory）cp 或合并到消费项目——能力不重复 cp。
 
@@ -27,17 +27,15 @@ disable-model-invocation: true
 - **无** `CLAUDE.md` → 新项目分支（步骤 2a）
 - **有** `CLAUDE.md` → 老项目分支（步骤 2b）
 
-### 2a. 新项目分支（全装）
+### 2a. 新项目分支
 
 1. 问技术栈（纯通用 / Flutter / 其他）→ 若 Flutter，提示同时装 `../flutter/`（App 或 Plugin 模板）
-2. **全装规则文档**（进阶门控默认关，用到才开——不必选规模删文件；能力已随 plugin 安装，不重复 cp）：
-   - `cp crules/CLAUDE.md` → 项目根 `CLAUDE.md`
-   - `cp crules/项目附录.md` → 项目根 `项目附录.md`
-   - `cp -r crules/进阶` → 项目根 `进阶/`
-   - `cp -r crules/agents` → 项目根 `.claude/agents/`
-   - `cp -r crules/memory` → 项目根 `.claude/memory/`
-3. 引导填 `项目附录.md` 的 **3 个必填**（项目名 / 技术栈 / 构建·分析·测试命令）
-4. 提示：进阶篇按「启用条件」门控自开，默认不影响；记忆库启用时按 `CLAUDE.md` §七 加会话级声明
+2. 问安装模式（**默认轻装**）：
+   - **轻装（默认）**：项目根 `CLAUDE.md` 只写数行——`@<crules 源>/CLAUDE.md` 导入行 + `## 本项目覆写` 空节。规则正文**单一权威在 crules 源**，源更新后本项目**下次会话自动生效**（零 cp 零合并）；项目特殊约定（提交前缀 / 术语 / 例外授权）写覆写节，**覆写优先于导入**
+   - **完整**：`cp` 全量 `CLAUDE.md`（团队多机 / 高定制 / 不想依赖 crules 源路径时选；复制即分叉，更新须重跑本命令合并）
+3. 无论模式，其余按需文档照常复制（按需读取、不随会话常驻，`@` 导入只管根规则）：`项目附录.md` → 项目根、`进阶/` → 项目根、`agents/` → `.claude/agents/`、`memory/` → `.claude/memory/`
+4. 引导填 `项目附录.md` 的 **3 个必填**（项目名 / 技术栈 / 构建·分析·测试命令）
+5. 提示：轻装模式依赖 crules 源路径稳定，源移动后须改导入行；进阶篇按「启用条件」门控自开；记忆库启用时按 `CLAUDE.md` §七 加会话级声明
 
 ### 2b. 老项目分支（合并，禁静默覆盖）
 
@@ -52,7 +50,7 @@ disable-model-invocation: true
    - **时间戳备份**：`cp CLAUDE.md CLAUDE.md.bak.$(date +%Y%m%d%H%M%S)`；`.claude/` 下将被触及的同名资产，同样**先备份再动**
 1. **体检 CLAUDE.md 冲突**：读老 `CLAUDE.md` + crules `CLAUDE.md`，列**冲突条款**（提交策略 / 双 Gate / 验证证据 / 不虚构 / 范围边界 / 敏感数据等），逐条标「仅老项目有 / 仅 crules 有 / 双方都有但不同」
 2. **取舍 CLAUDE.md**：需求方逐条定——保留老的 / 用 crules 的 / 融合（融合写明怎么融）
-3. **合并 CLAUDE.md**：据取舍生成合并 `CLAUDE.md`（老规则在前 + crules 纪律，冲突按取舍）；取舍记录落 `.claude/memory/decisions/`（为何保留 / 为何用 crules）
+3. **合并 CLAUDE.md**：据取舍生成合并 `CLAUDE.md`（老规则在前 + crules 纪律，冲突按取舍）；取舍记录落 `.claude/memory/decisions/`（为何保留 / 为何用 crules）。**亦可选轻装产物**：`@` 导入 crules 源 + 老规则整体放「本项目覆写」节（覆写优先）——冲突取舍转化为「覆写压过导入」的分层，后续 crules 更新自动生效
 4. **附录对齐**：把老项目实际信息（技术栈 / 命令 / 红线）填进 `项目附录.md`，不重复造
 5. **进阶 / agents / memory 体检合并**（**不是** `cp -r` 一把梭）：
    - **进阶/**：老项目若已有 `进阶/` 同名文件 → 同 CLAUDE.md 流程（体检→取舍→合并），冲突落 `decisions/`；无则直接复制
