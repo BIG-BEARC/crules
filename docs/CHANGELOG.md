@@ -19,6 +19,12 @@
 - **`进阶/插件工作流.md`**：spec-kit 列标「⚠️ 实验性，未经本包实测」，说明段区分 superpowers（已实测）/ spec-kit（待实测）（E3）
 - **`docs/重构方案-v22-plugin.md`**：按 v28 裁决修订——review-review 不进 plugin（留仓库本地）、update-memory 改 command（+`disable-model-invocation`）、plugin 清单旧名改 crules（N1）；R1 收口，v22 主线可执行
 
+## 08-17 · v39 六类绕过收敛修复（匹配策略换轴）
+
+- **`hooks/deny-list.py`**：git/rm 签名从行首锚定改为**段内非锚定搜索**——前缀同族（sudo/env/带参）/包裹（( )/$( )/反引号）/`git -C` 插花一次收敛，不再枚举前缀词；pathspec 补 `./`·`*` glob；rm 白名单 normpath（避 realpath 符号链接误拦，`/tmp/../Users` 穿越收口）；git clean dry-run（-n）放行修误拦
+- **`hooks/test_deny_list.py`**：fixture 34→49（+13 拦含红队 8 向量 + 2 dry-run 放行），49/49 全绿；e2e sudo 变体真实会话封堵实证
+- **`.claude-plugin/`** 版本 0.1.7→0.1.8
+
 ## 08-17 · v37 外审追杀裁定 + deny-list 加固（P0-1/P0-2 收口）
 
 - **`hooks/deny-list.py` 加固**：切分符补换行/单管道；`+refspec` 强推、`git checkout .` 裸点、`git restore :/` 全树、rm 长选项（`--recursive --force`）入名单；前缀环境变量赋值与 `command`/`exec` 剥离；头部加「安全网非沙箱」诚实声明

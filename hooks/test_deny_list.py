@@ -34,6 +34,21 @@ BLOCK_CASES = [
     "git checkout :/",
     "FOO=1 git reset --hard",                # 前缀环境变量赋值
     "command git clean -fd",                 # command 前缀
+    # --- v39 红队 8 向量（v38 外审裁定收敛修复）---
+    "sudo git reset --hard",                 # 前缀同族：sudo
+    "env git push --force origin main",      # 前缀同族：env
+    "(git reset --hard HEAD)",               # 子 shell 包裹
+    "$(git push --force origin main)",       # 命令替换包裹
+    "git checkout ./",                       # 尾斜杠逃逸（v37 漏修）
+    "git restore ./",                        # 同上
+    "git checkout -- *",                     # glob 等价全丢弃
+    "rm -rf /tmp/../Users",                  # 白名单前缀穿越（normpath 收口）
+    # --- v39 前轮未修 3 + 追加 ---
+    "git -C somedir reset --hard",           # 全局选项插花
+    "git push origin +main",                 # +refspec 无冒号强推
+    "sudo -u root git clean -fd",            # 带参数前缀
+    "echo `git reset --hard`",               # 反引号包裹
+    "echo '参考：git reset --hard 的用法'",   # 字符串误拦样本（deny-by-default 文档化取舍）
 ]
 
 # 应放：正常命令 / 白名单 / 安全变体
@@ -52,6 +67,9 @@ ALLOW_CASES = [
     "git restore -s stash@{1} .",            # 指定源恢复（非丢弃工作区）
     "echo 'a|b'",                            # 引号内的管道符
     "pip install --force",                   # 非 git push 的 --force
+    # --- v39 dry-run 放行（修 v38 发现的误拦）---
+    "git clean -nfd",                        # -n dry-run，无害
+    "git clean -nd",                         # 同上
 ]
 
 def should_block(case: str) -> bool:
