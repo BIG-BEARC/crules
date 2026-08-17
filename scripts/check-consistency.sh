@@ -60,4 +60,8 @@ v1=$(python3 -c 'import json;print(json.load(open(".claude-plugin/plugin.json"))
 v2=$(python3 -c 'import json;print(json.load(open(".claude-plugin/marketplace.json"))["plugins"][0]["version"])' 2>/dev/null)
 [ -n "$v1" ] && [ "$v1" = "$v2" ] || echo "  版本不一致: plugin.json=$v1 marketplace.json=$v2"
 
+echo "== H. deny-list 回归测试（对抗样本库，新增绕过先加 fixture 再修名单）=="
+hout=$(python3 hooks/test_deny_list.py 2>&1); hrc=$?
+[ $hrc -eq 0 ] || { echo "$hout" | sed 's/^/  /'; }
+
 echo "== 完成（以上无输出项 = 通过）=="

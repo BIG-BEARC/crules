@@ -19,6 +19,14 @@
 - **`进阶/插件工作流.md`**：spec-kit 列标「⚠️ 实验性，未经本包实测」，说明段区分 superpowers（已实测）/ spec-kit（待实测）（E3）
 - **`docs/重构方案-v22-plugin.md`**：按 v28 裁决修订——review-review 不进 plugin（留仓库本地）、update-memory 改 command（+`disable-model-invocation`）、plugin 清单旧名改 crules（N1）；R1 收口，v22 主线可执行
 
+## 08-17 · v37 外审追杀裁定 + deny-list 加固（P0-1/P0-2 收口）
+
+- **`hooks/deny-list.py` 加固**：切分符补换行/单管道；`+refspec` 强推、`git checkout .` 裸点、`git restore :/` 全树、rm 长选项（`--recursive --force`）入名单；前缀环境变量赋值与 `command`/`exec` 剥离；头部加「安全网非沙箱」诚实声明
+- **`hooks/test_deny_list.py` 新增（进 git）**：34 fixture（20 拦含外审 6 绕过 + 14 放），修正 v35「单测 15/15 跑完即弃」验证无痕；挂 `scripts/check-consistency.sh` 新 H 查（对抗样本库）
+- **`commands/crules-init.md`**：轻装导入行改指稳定路径（crules 仓库路径优先；cache `<version>` 目录标静默漂移风险不推荐）——P0-2 修复
+- **`README.md`** hooks 行补「名单非穷尽，安全网非沙箱」声明
+- **`.claude-plugin/`** 版本 0.1.6→0.1.7；e2e 实测换行绕过变体已被封堵
+
 ## 08-14 · v36 外审裁定落地（脚本 F/G 查 + pending-updates 漂移队列）
 
 - **`scripts/check-consistency.sh`** +两查：F 跨包链接（规范化后越出包根即报，v18-D 5 文件豁免）——治「源仓库通过、分发场景失明」盲区；G 双 json 版本号一致性
