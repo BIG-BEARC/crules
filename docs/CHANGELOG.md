@@ -5,6 +5,12 @@
 
 ---
 
+## 08-17 · v41 归档轮（详情瘦身 + 探测纪律）
+
+- **`docs/评审.md`**：v30-v40 详情段移 archive（更名 `archive/详情-v16-v40.md`），恢复单段详情形态；已关闭表按 L11 纪律批量瘦身（v23-T1→v30 共 26 行移 archive）
+- **`hooks/test_deny_list.py`**：头注补探测纪律——红队探测输入必须 json.dumps 构造、禁手拼 JSON（第三轮红队假证据教训）
+- 零规则/代码行为改动
+
 ## 08-17 · v40 红队 R1-R3 收口（force-switch / 引号 / stash 对齐）
 
 - **`hooks/deny-list.py`**：`git checkout -f`·`git switch -f` 强切丢弃入名单（`force_switch()`，GIT_SIG 加 `switch`）；`strip_quotes()` 剥配对引号（引号 pathspec 逃逸 + 引号白名单路径误拦 + `'*'` glob 三病一治）；`git stash clear` 入名单（对齐 CLAUDE.md §2；drop/pop 按「只拦无歧义」裁决不拦）；push force 改独立词匹配（lease 单用放行 / lease 在前 force 在后拦截）；`-s HEAD` 与 `--source=HEAD` 对齐
@@ -59,7 +65,7 @@
 
 - **`scripts/check-consistency.sh`** 新增——五查一致性脚本（悬空链接 / 旧名 / README 清单 / 段落级文字指针 / 归档引用，含白名单）；首跑捕获归档文件 4 处内部路径错位（已修），v13续 B2 机械化底座
 - **`README.md`**：「怎么用」命令改 `/crules:crules-init`（实测裸名 Unknown command，W4 修正）
-- **`docs/archive/详情-v16-v29.md`**：修 4 处内部相对路径错位（`archive/xxx` → 同目录 `xxx`）
+- **`docs/archive/详情-v16-v40.md`**：修 4 处内部相对路径错位（`archive/xxx` → 同目录 `xxx`）
 - **`docs/重构方案-v22-plugin.md`**：§八 slash 形态行实测收口
 - **`.claude-plugin/`** 版本 0.1.2→0.1.3
 
@@ -81,17 +87,17 @@
 
 - **`CLAUDE.md`**：§三 实施纪律 +5 条（改共享物先查引用 / 参照物优先 / 二手摘要只用于定位 / 修一坑查同类 / 补丁死结止损）；§四 验证 +2 条（接口数据结构以真实响应为准 / 构建·测试通过≠规范合规盲区自查）——提炼自 `../复盘/` 三份实战复盘（订单模块返工 15+ 次 / 修 bug 连环失败 / 同一违规三次），通用化措辞
 - **`agents/error.md`**：新增「根因定位方法论」节（分层探针 / 对照实验分离变量 / 看日志判定 / 补丁死结止损线 / 修一坑查同类）；修 D9（「频繁 reset」原项目语境残留 → 「每次调用视为独立任务」）
-- **`docs/评审.md`**：v27-v29 详情归档（archive 更名 `详情-v16-v29.md`）；D9 关闭；v30 轮登记（含复盘→规则提炼映射表）
+- **`docs/评审.md`**：v27-v29 详情归档（archive 更名 `详情-v16-v40.md`）；D9 关闭；v30 轮登记（含复盘→规则提炼映射表）
 
 ## 08-14 · v27 复盘（M1-M3 裁定 + 归档）
 
 - **`docs/评审.md`**：v26 详情段归档；Changelog +v27；「精简至 135 行」瞬时数字按 M2 原则抹除；v25 未登记产出行补「口径查证再次受阻」注
-- **`docs/archive/详情-v16-v25.md` → `详情-v16-v29.md`**（更名）：追加 v26 详情段，全部引用同步（grep 旧名零残留）
+- **`docs/archive/详情-v16-v25.md` → `详情-v16-v40.md`**（更名）：追加 v26 详情段，全部引用同步（grep 旧名零残留）
 - 裁定结论：M1 全对 / M2 建议采纳·事实指控驳回 / M3 对——详见 评审.md v27 段
 
 ## 08-14 · v26 续（复核微修 M1-M3）
 
-- **`docs/评审.md`**：两处「v18 复盘」段文字指针改指 `archive/详情-v16-v29.md`（M1，归档后未同步的悬空指针）+「715→135 行」行数口径修正为「精简至 135 行」（M2）
+- **`docs/评审.md`**：两处「v18 复盘」段文字指针改指 `archive/详情-v16-v40.md`（M1，归档后未同步的悬空指针）+「715→135 行」行数口径修正为「精简至 135 行」（M2）
 - **`commands/crules-init.md`** + **`README.md`**：常驻成本口径补「+ `项目附录.md` 合计 ≈4–5k token」（M3）
 
 ## 08-14 · v26 外审落地（E1 诚实化 + trivial 批量 + 归档）
@@ -100,7 +106,7 @@
 - **`进阶/Agent编排.md`**：「可用 Agent 模板」拆「通用角色 / 技术栈专属角色」两表（E2），reviewer 行补「只报不改」
 - **`commands/crules-init.md`**：「全装零负担」改为常驻成本说明（E1 连带）
 - **`memory/README.md`** + **`进阶/记忆库体系.md`**：「不进 git」表述补「消费项目运行时 vs crules 源仓库模板」语境（N6）
-- **`docs/archive/详情-v16-v29.md` 新增**：评审.md v16-v25 九段详情归档，评审.md 恢复单段详情精简形态（N7 / v24-C2 止损执行）
+- **`docs/archive/详情-v16-v40.md` 新增**：评审.md v16-v25 九段详情归档，评审.md 恢复单段详情精简形态（N7 / v24-C2 止损执行）
 
 ## 08-14 · v25 落地（reviewer 只报不改）
 

@@ -4,6 +4,9 @@
 跑法：python3 hooks/test_deny_list.py（scripts/check-consistency.sh 的 H 查调用）
 fixture 原则：该拦全拦（含 v37 外审 5 绕过）、该放全放（含 --force-with-lease / /tmp 白名单）；
 新增绕过形态时**先加 fixture（红）→ 修 deny-list（绿）**，测试即对抗样本库。
+探测纪律（v41，第三轮红队假证据教训）：对 deny-list 做人工/脚本探测时，输入 JSON
+必须用 json.dumps 构造（如本文件 :97），**禁止 shell 手拼**——手拼含引号命令会产生
+非法 JSON，脚本 json.load 失败即 exit(0)，探测结果恒为「放行」的假证据。
 """
 import json, os, subprocess, sys
 
