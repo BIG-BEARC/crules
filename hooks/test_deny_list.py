@@ -49,6 +49,17 @@ BLOCK_CASES = [
     "sudo -u root git clean -fd",            # 带参数前缀
     "echo `git reset --hard`",               # 反引号包裹
     "echo '参考：git reset --hard 的用法'",   # 字符串误拦样本（deny-by-default 文档化取舍）
+    # --- v40 红队 R1-R3 + 边角（外审复核全属实）---
+    "git checkout -f main",                  # R1：-f 强切丢弃未提交改动
+    "git checkout -f",                       # R1 同族：无 pathspec
+    "git switch -f main",                    # R1 同族（外审补充：switch 不在签名内）
+    'git checkout "."',                      # R2：引号 pathspec
+    'git restore "./"',                      # R2 同上
+    "git checkout -- '*'",                   # R2 同根：引号 glob（v39 残留#1）
+    "git stash clear",                       # R3 裁决：clear 进名单
+    "git push --force-with-lease --force origin main",  # 边角：lease 在前 force 在后（git 语义 force 生效）
+    "git restore -s HEAD .",                 # v39 残留#2：-s HEAD 与 --source=HEAD 对齐
+    "git log --grep=checkout .",             # v39 残留#3：选项值含签名词的 FP 类（文档化取舍）
 ]
 
 # 应放：正常命令 / 白名单 / 安全变体
@@ -70,6 +81,14 @@ ALLOW_CASES = [
     # --- v39 dry-run 放行（修 v38 发现的误拦）---
     "git clean -nfd",                        # -n dry-run，无害
     "git clean -nd",                         # 同上
+    # --- v40（R2 白名单引号 / R3 裁决边界 / 新签名 FP 边界锁定）---
+    'rm -rf "/tmp/x"',                       # R2 误拦修复：引号白名单路径
+    'rm -rf "/var/folders/abc"',             # 同上
+    "git stash drop stash@{1}",              # R3 裁决边界：drop 不进名单
+    "git stash pop",                         # R3 裁决边界：pop 不拦
+    "git switch main",                       # switch 基础形态不误拦
+    "git switch -c feat",                    # switch 建分支不拦
+    "git checkout -f -b hotfix",             # -f 搭配 -b 建分支：例外放行
 ]
 
 def should_block(case: str) -> bool:

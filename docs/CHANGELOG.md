@@ -5,6 +5,14 @@
 
 ---
 
+## 08-17 · v40 红队 R1-R3 收口（force-switch / 引号 / stash 对齐）
+
+- **`hooks/deny-list.py`**：`git checkout -f`·`git switch -f` 强切丢弃入名单（`force_switch()`，GIT_SIG 加 `switch`）；`strip_quotes()` 剥配对引号（引号 pathspec 逃逸 + 引号白名单路径误拦 + `'*'` glob 三病一治）；`git stash clear` 入名单（对齐 CLAUDE.md §2；drop/pop 按「只拦无歧义」裁决不拦）；push force 改独立词匹配（lease 单用放行 / lease 在前 force 在后拦截）；`-s HEAD` 与 `--source=HEAD` 对齐
+- **`hooks/test_deny_list.py`**：fixture 49→66（+10 拦 + 7 放），红→绿流程留痕（11 红确认后修复）
+- **`.claude-plugin/`** 版本 0.1.8→0.1.9
+
+---
+
 ## 08-14 · v29 执行 v22 plugin 化（能力上线 plugin）
 
 - **`.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`** 新增——crules plugin（本地路径源，user scope）
