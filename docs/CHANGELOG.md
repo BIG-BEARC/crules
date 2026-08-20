@@ -5,6 +5,15 @@
 
 ---
 
+## 08-19 · v44 待办池拆分
+
+- **`docs/待办.md` 新增**——待办需求池独立（历轮评审遗留 + 需求方直接提出的优化需求，首个 Y1）；单向同步纪律：状态先改待办.md，评审.md Changelog 只记轮次
+- **`docs/评审.md`**：open 表迁出改指针段；维护规则同步（本文件新形态「Changelog + 最新详情 + 已关闭」）；顺修 v43 插行格式损伤
+
+## 08-19 · v42 README 使用向导
+
+- **`README.md`**：新增「/crules:crules-init 会做什么（向导流程）」一节——新项目三问+复制清单（含文件树）/ 老项目硬护栏+冲突体检+逐条裁决+资产保护 / 跑完后的会话变化说明
+
 ## 08-17 · v41 归档轮（详情瘦身 + 探测纪律）
 
 - **`docs/评审.md`**：v30-v40 详情段移 archive（更名 `archive/详情-v16-v40.md`），恢复单段详情形态；已关闭表按 L11 纪律批量瘦身（v23-T1→v30 共 26 行移 archive）
@@ -18,20 +27,6 @@
 - **`.claude-plugin/`** 版本 0.1.8→0.1.9
 
 ---
-
-## 08-14 · v29 执行 v22 plugin 化（能力上线 plugin）
-
-- **`.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`** 新增——crules plugin（本地路径源，user scope）
-- **`commands/crules-init.md`** + **`commands/update-memory.md`**：frontmatter 加 `disable-model-invocation: true`；crules-init 步骤 0 改 plugin cache 定位源（CRULES_HOME 终结）、2a/2b 适配分工（不再 cp commands）
-- **`commands/review-review.md` → `.claude/commands/`**（移动）：仓库内部命令不进 plugin（plugin 收录 commands/ 全部 .md）
-- **`agents/README.md` 删除**（N9）：plugin 把它收录为伪 agent；链接孤儿，内容已被 Agent编排 / 根 README / 角色卡覆盖
-- **`README.md`**：「怎么用」改两条命令（装 plugin + /crules-init）；复制表与文件清单的 commands 行改 plugin 分发说明
-
-## 08-14 · v28 裁决落地（R1 收口 + E4 硬护栏 + E3 + N1）
-
-- **`commands/crules-init.md`**：老项目分支新增步骤 0 硬护栏——git 干净树检查 + 时间戳备份（E4：「禁静默覆盖」从纯 prompt 升级为硬护栏）
-- **`进阶/插件工作流.md`**：spec-kit 列标「⚠️ 实验性，未经本包实测」，说明段区分 superpowers（已实测）/ spec-kit（待实测）（E3）
-- **`docs/重构方案-v22-plugin.md`**：按 v28 裁决修订——review-review 不进 plugin（留仓库本地）、update-memory 改 command（+`disable-model-invocation`）、plugin 清单旧名改 crules（N1）；R1 收口，v22 主线可执行
 
 ## 08-17 · v39 六类绕过收敛修复（匹配策略换轴）
 
@@ -89,7 +84,21 @@
 - **`agents/error.md`**：新增「根因定位方法论」节（分层探针 / 对照实验分离变量 / 看日志判定 / 补丁死结止损线 / 修一坑查同类）；修 D9（「频繁 reset」原项目语境残留 → 「每次调用视为独立任务」）
 - **`docs/评审.md`**：v27-v29 详情归档（archive 更名 `详情-v16-v40.md`）；D9 关闭；v30 轮登记（含复盘→规则提炼映射表）
 
-## 08-14 · v27 复盘（M1-M3 裁定 + 归档）
+## 08-14 · v29 执行 v22 plugin 化（能力上线 plugin）
+
+- **`.claude-plugin/plugin.json` + `.claude-plugin/marketplace.json`** 新增——crules plugin（本地路径源，user scope）
+- **`commands/crules-init.md`** + **`commands/update-memory.md`**：frontmatter 加 `disable-model-invocation: true`；crules-init 步骤 0 改 plugin cache 定位源（CRULES_HOME 终结）、2a/2b 适配分工（不再 cp commands）
+- **`commands/review-review.md` → `.claude/commands/`**（移动）：仓库内部命令不进 plugin（plugin 收录 commands/ 全部 .md）
+- **`agents/README.md` 删除**（N9）：plugin 把它收录为伪 agent；链接孤儿，内容已被 Agent编排 / 根 README / 角色卡覆盖
+- **`README.md`**：「怎么用」改两条命令（装 plugin + /crules-init）；复制表与文件清单的 commands 行改 plugin 分发说明
+
+## 08-14 · v28 裁决落地（R1 收口 + E4 硬护栏 + E3 + N1）
+
+- **`commands/crules-init.md`**：老项目分支新增步骤 0 硬护栏——git 干净树检查 + 时间戳备份（E4：「禁静默覆盖」从纯 prompt 升级为硬护栏）
+- **`进阶/插件工作流.md`**：spec-kit 列标「⚠️ 实验性，未经本包实测」，说明段区分 superpowers（已实测）/ spec-kit（待实测）（E3）
+- **`docs/重构方案-v22-plugin.md`**：按 v28 裁决修订——review-review 不进 plugin（留仓库本地）、update-memory 改 command（+`disable-model-invocation`）、plugin 清单旧名改 crules（N1）；R1 收口，v22 主线可执行
+
+## 08-14 · v27 复盘（M1-M3 裁决 + 归档）
 
 - **`docs/评审.md`**：v26 详情段归档；Changelog +v27；「精简至 135 行」瞬时数字按 M2 原则抹除；v25 未登记产出行补「口径查证再次受阻」注
 - **`docs/archive/详情-v16-v25.md` → `详情-v16-v40.md`**（更名）：追加 v26 详情段，全部引用同步（grep 旧名零残留）

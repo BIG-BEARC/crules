@@ -28,6 +28,42 @@ claude plugin install crules@crules-market --scope user
 
 > 不想用命令？手动 `cp` 见下方「复制目标路径」+「文件清单」，按需复制。
 
+### `/crules:crules-init` 会做什么（向导流程）
+
+交互式向导，**一步步问你，不是黑盒一键跑完；只动规则文件，不碰业务代码**。
+
+**准备（自动）**：从 plugin cache 定位模板源（取版本号最大目录）；被权限挡住时问你 crules 仓库路径。
+**分流（自动）**：项目根有无 `CLAUDE.md` → 新项目 / 老项目。
+
+**新项目分支——三问 + 复制：**
+
+1. 问技术栈（Flutter → 提示同时装 [`../flutter/`](../flutter/)）
+2. 问安装模式：**轻装（默认）**——CLAUDE.md 仅数行 `@` 导入 + 覆写节，规则更新下次会话自动生效；**完整**——全量 cp（团队多机 / 高定制），更新须重跑本命令合并
+3. 引导填**附录 3 必填**（项目名 / 技术栈 / 构建·分析·测试命令——crules 的验证纪律靠它知道在你项目里该跑什么命令）
+
+复制清单（两种模式的按需文档相同）：
+
+```text
+你的项目/
+├── CLAUDE.md            轻装：数行导入 / 完整：全文
+├── 项目附录.md           模板，待填
+├── 进阶/                6 篇，门控默认关、用到才读
+└── .claude/
+    ├── agents/          error / reviewer / plan-reviewer（均只报不改）
+    └── memory/          NAVIGATION / MAINTENANCE / patterns / business-rules / INVARIANTS
+```
+
+**老项目分支——「禁静默覆盖」最高纪律：**
+
+0. **硬护栏**：`git status` 确认工作树干净（不干净先 commit/stash）→ 现有 CLAUDE.md 与 `.claude/` 资产打时间戳备份——**全程可回退**
+1. **体检冲突**：逐条列出老规则 vs crules 规则差异（提交策略 / 双 Gate / 验证 / 范围边界……），标「仅老项目有 / 仅 crules 有 / 双方都有但不同」
+2. **你逐条裁决**：保留老的 / 用 crules 的 / 融合（说明怎么融）
+3. **生成合并 CLAUDE.md**：取舍记录落 `.claude/memory/decisions/`（留审计）；也可产轻装形态（`@` 导入 + 老规则整体放覆写节）
+4. **附录对齐**：把老项目实际命令 / 红线填进附录，不重复造
+5. **资产体检**：老项目 `.claude/agents|memory` 同名文件**默认保留你的**（那是真资产），crules 的并排参考，禁止覆盖
+
+**跑完后，每次会话自动生效**：规则常驻（先方案后动手 / 不自动 commit，你说 `commit` 才提交 / 完成必贴验证输出）；破坏性命令硬闸与 plugin 能力属 user 级，独立于 init 全局生效。
+
 ### 工具链（可选增强）
 
 本包不依赖任何插件即可用。若装了 spec-kit / superpowers，工作流的 skill 映射见 [`进阶/插件工作流.md`](进阶/插件工作流.md)——两者在需求 / 方案阶段重叠，**选一个为主或混搭**，由你指定。没装则用内置兜底（Plan 模式等），仍是完整工作流。
@@ -58,7 +94,7 @@ claude plugin install crules@crules-market --scope user
 | `记忆库体系.md`（含 `business-rules.md` / `INVARIANTS.md` 约束载体） | 大项目代码索引 / 约束外化 | 重度 |
 | `插件工作流.md` | 装了 superpowers / spec-kit | 任意 |
 
-**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计实测 ≈4–5k token）；进阶全装但门控默认关，用到才开。
+**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计 ≈4.6–5.3k token；v47 提炼 +4 条实施 / 验证纪律后的口径）；进阶全装但门控默认关，用到才开。
 
 ---
 

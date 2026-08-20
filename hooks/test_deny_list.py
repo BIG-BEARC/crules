@@ -63,6 +63,17 @@ BLOCK_CASES = [
     "git push --force-with-lease --force origin main",  # 边角：lease 在前 force 在后（git 语义 force 生效）
     "git restore -s HEAD .",                 # v39 残留#2：-s HEAD 与 --source=HEAD 对齐
     "git log --grep=checkout .",             # v39 残留#3：选项值含签名词的 FP 类（文档化取舍）
+    # --- v47 批次一（08-18 外审 5 向量 + 裁定 B dry-run×force 信号即拦 + 空操作数）---
+    "find . -name '*.log' | xargs rm -rf",     # 向量1：xargs 注入，rm 无显式操作数（paths 空集空真放行）
+    "git branch --delete --force feat",        # 向量2：-D 长选项等价拼法
+    "git branch -d -f feat",                   # 向量3：-D 分离旗标等价拼法
+    "git push -fv origin main",                # 向量4：push 短旗标捆绑（-fq 同族）
+    "git checkout -qf main",                   # 向量5：force_switch 捆绑 -qf ≠ -f
+    "git push -fn origin main",                # 裁定 B：dry-run×force 组合信号即拦
+    "git push --dry-run --force origin main",  # 裁定 B 同上（长选项组合；当前已拦，行为锁定）
+    "git push -n origin +main",                # 裁定 B：dry-run + refspec 强推（当前已拦，锁定）
+    "git push --delete -n origin old-branch",  # 裁定 B：dry-run + 删远端分支（当前已拦，锁定）
+    "rm -rf build 2>&1",                       # 重定向 token 兼查：非白名单路径 + 重定向 → 仍拦
 ]
 
 # 应放：正常命令 / 白名单 / 安全变体
@@ -92,6 +103,8 @@ ALLOW_CASES = [
     "git switch main",                       # switch 基础形态不误拦
     "git switch -c feat",                    # switch 建分支不拦
     "git checkout -f -b hotfix",             # -f 搭配 -b 建分支：例外放行
+    # --- v47 重定向 FP 修复（重定向 token 不作 path 参与白名单判定）---
+    "rm -rf /tmp/x 2>/dev/null",               # 白名单路径 + 重定向 → 放（当前误拦，修复后放行）
 ]
 
 def should_block(case: str) -> bool:

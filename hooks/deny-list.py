@@ -18,6 +18,9 @@
 #     deny-by-default 哲学接受，误拦走白名单调整
 #   - **黑名单无法穷尽**（变量拼接 / 嵌套 eval / 写脚本再执行等不在防线内）——本 hook 是
 #     安全网而非沙箱，终极防线是 Claude Code 原生权限确认与需求方审阅
+# v47 收口（红→绿 fixture 先行）：push/branch/force_switch 旗标判定统一走 parse_flags（拆捆绑短旗标，-fv/-qf/-D 等价拼法一次收敛）；
+#   push dry-run×force 组合信号即拦（裁定 B：clean -nd 是正当诊断、push -fn 不是，不对称有理由）；rm 空操作数拦（deny-by-default：
+#   空操作数 rm -rf 为静默 no-op，典型场景即 xargs/stdin 注入）；重定向 token 剥离后再判白名单（修 /tmp/x 2>/dev/null 误拦）
 # 决策边界（v18 复盘）：v18-A 撤销的是「意图判断类」hook；本 hook 不判意图、deny-by-default
 import json, os, re, sys
 
@@ -74,9 +77,11 @@ def checkout_discards(seg_after_sub):
     return False
 
 def force_switch(seg_after_sub):
-    """checkout/switch 带 -f/--force 且非建分支/指定源 → 强切丢弃未提交改动"""
-    flags = {t for t in seg_after_sub.split() if t.startswith("-")}
-    return ("-f" in flags or "--force" in flags) and not flags & {"-b", "--branch", "-c", "--create", "-s", "--source"}
+    """checkout/switch 带 -f/--force（含捆绑短旗标）且非建分支/指定源 → 强切丢弃未提交改动"""
+    short, longs = parse_flags(seg_after_sub.split())
+    force = "f" in short or "force" in longs
+    exempt = any(c in short for c in "bcs") or bool(longs & {"branch", "create", "source"})
+    return force and not exempt
 
 for part in re.split(r";|&&|\|\||\||\r?\n", cmd):
     seg = part.strip()
@@ -87,9 +92,10 @@ for part in re.split(r";|&&|\|\||\||\r?\n", cmd):
     if m:
         sub = m.group(1)
         if sub == "push":
-            if re.search(r"(^|\s)(--force|-f)(\s|$)", seg):
+            short, longs = parse_flags(seg.split())
+            if "f" in short or "force" in longs:
                 blocked("破坏性命令（git push --force）：请人工确认后自行执行；确需强推建议人工用 --force-with-lease")
-            if "--delete" in seg or re.search(r"\s:[^\s]", seg):
+            if "delete" in longs or re.search(r"\s:[^\s]", seg):
                 blocked("破坏性命令（git push 删除远端分支）：请人工确认后自行执行")
             if re.search(r"(^|\s)\+\S+", seg):
                 blocked("破坏性命令（git push +refspec 强制覆盖远端）：请人工确认后自行执行")
@@ -99,8 +105,10 @@ for part in re.split(r";|&&|\|\||\||\r?\n", cmd):
             short, longs = parse_flags(seg.split())
             if ("f" in short or "force" in longs) and not ("n" in short or "dry-run" in longs):
                 blocked("破坏性命令（git clean -f）：请人工确认后自行执行")
-        elif sub == "branch" and re.search(r"(^|\s)-D\b", seg):
-            blocked("破坏性命令（git branch -D 强删分支）：请人工确认后自行执行")
+        elif sub == "branch":
+            short, longs = parse_flags(seg.split())
+            if "D" in short or (("d" in short or "delete" in longs) and ("f" in short or "force" in longs)):
+                blocked("破坏性命令（git branch -D 强删分支）：请人工确认后自行执行")
         elif sub == "stash":
             rest = seg[m.end(1):].split()
             if rest and rest[0] == "clear":  # 只拦 clear（全删无恢复）；drop/pop 按 v40 裁决不拦
@@ -117,7 +125,9 @@ for part in re.split(r";|&&|\|\||\||\r?\n", cmd):
         has_r = "r" in short or "recursive" in longs
         has_f = "f" in short or "force" in longs
         if has_r and has_f:
-            paths = [os.path.normpath(os.path.expanduser(strip_quotes(t))) for t in tokens[1:] if not t.startswith("-")]
-            if not all(p == "/tmp" or p.startswith("/tmp/") or p.startswith("/var/folders/") for p in paths):
-                blocked("破坏性命令（rm 递归+强制，非临时目录）：请人工确认后自行执行")
+            REDIR = re.compile(r"^\d*[<>]")  # 重定向 token（2>&1 / 2>/dev/null / <file）不作 path
+            paths = [os.path.normpath(os.path.expanduser(strip_quotes(t)))
+                     for t in tokens[1:] if not t.startswith("-") and not REDIR.match(t)]
+            if not paths or not all(p == "/tmp" or p.startswith("/tmp/") or p.startswith("/var/folders/") for p in paths):
+                blocked("破坏性命令（rm 递归+强制，非临时目录或无操作数）：请人工确认后自行执行")
 sys.exit(0)
