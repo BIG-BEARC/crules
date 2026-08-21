@@ -16,7 +16,8 @@ mkproj() {  # 造一个带轻装 CLAUDE.md 的探针项目
   printf '@%s/CLAUDE.md\n\n## 本项目覆写\n（探针临时项目，无覆写）\n' "$CRULES_SRC" > "$d/CLAUDE.md"
   echo "$d"
 }
-run_claude() {  # $1=cwd $2=prompt [$3=extra flags]
+run_claude() {  # $1=cwd $2=prompt [$3=extra flags]；dryrun 模式短路（头注「claude 调用跳过」的兑现）
+  if [ "${PROBE_DRYRUN:-0}" = "1" ]; then echo "[dryrun] $2"; return 0; fi
   (cd "$1" && CLAUDE_CODE_DISABLE_UNKNOWN_MODEL_WINDOW_ENFORCEMENT=1 \
     timeout 150 claude -p --model fable "$2" ${3:-} 2>/dev/null)
 }
@@ -83,4 +84,4 @@ try P10-完成带验证 '[ "$(cat "$d/a.txt")" = "bar" ] && echo "$out" | grep -
 
 echo "== 汇总：PASS=$PASS FAIL=$FAIL SKIP=$SKIP =="
 rm -rf /tmp/crules-probe.* 2>/dev/null
-[ "$FAIL" -eq 0 ] && [ "$PASS" -gt 0 ] && exit 0 || exit 1
+[ "$FAIL" -eq 0 ] && { [ "$PASS" -gt 0 ] || [ "$SKIP" -gt 0 ]; } && exit 0 || exit 1

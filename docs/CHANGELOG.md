@@ -6,6 +6,14 @@
 
 ---
 
+## 08-21 · v60 外部复核收口（部署死链 / 物理锁 / 易用性，plugin 0.3.1）
+
+- **`进阶/`×4 + `进阶/README.md`**：10 处 `../agents|../memory|../commands` 链接反引号化（部署位说明）——v56 只收了越包链接，本轮补齐复制映射断链（进阶→项目根、agents/memory 下沉 `.claude/`、commands 不复制）
+- **`agents/error.md`**：frontmatter 去 Edit/Write——纸锁升**物理只读**（与 reviewer/plan-reviewer 对等）；修复场景转主控
+- **`CLAUDE.md` §2**：补「hook 硬闸与确认的边界」（deny-list 命令确认后也由人工执行，特性非缺陷）
+- **`README.md` + `commands/crules-init.md`**：安装路径改占位符（通用定位）；cache 版本排序补语义版本规则（0.10>0.9 勿用字典序）；轻装模式补团队场景缝隙说明；token 口径 ≈5.5–7k（v60 实测）
+- **非分发**：`scripts/probes.sh` dryrun 短路 + exit 修正（实测 0.4s/10 SKIP/EXIT 0）；`ci.yml` A-H→A-I；`release.sh` verify-cache include 补 *.sh/*.yml；v58/v59 Changelog 行补三问①留痕注
+
 ## 08-21 · v57 待办池清仓（缓办设计项全收口，plugin 0.3.0）
 
 - **`CLAUDE.md`**：§三「改共享物先查引用」+接口演进同步测试 fake（V4）；「Gate 例外」+信任档位注（提速档仅需求方显式声明，V3）

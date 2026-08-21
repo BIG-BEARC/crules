@@ -1,6 +1,6 @@
 # Agent 编排
 
-> **启用条件**：使用多 agent 协作时复制本篇 + 配套 [`../agents/`](../agents/) 目录。单人单 agent 工作不需要本篇。
+> **启用条件**：使用多 agent 协作时复制本篇 + 配套 `agents/` 目录（部署位 `.claude/agents/`）。单人单 agent 工作不需要本篇。
 > 配套根规则：[`../CLAUDE.md`](../CLAUDE.md)。本篇不重复根规则（提交、范围、后台 diff 展示等），只定义角色分工与调度。
 > 启用 superpowers / spec-kit 时，多 agent 阶段的 skill 映射（如 `subagent-driven-development`）见 [`插件工作流.md`](插件工作流.md)。
 >
@@ -32,7 +32,7 @@
 
 ## 可用 Agent 模板
 
-**通用角色**（[`../agents/`](../agents/)，任意技术栈）：
+**通用角色**（`agents/`，部署位 `.claude/agents/`，任意技术栈）：
 
 | Agent | 任务难度 | 主责 |
 |---|---|---|
@@ -49,9 +49,9 @@
 | `i18n` | 低 | 多语言翻译、文案 Key 管理 |
 | `platform` | 中 | 原生 / 平台特定代码、平台桥接 |
 
-> [`plan-reviewer`](../agents/plan-reviewer.md) 属**方案评审子系统**（实施前审方案，见 [`方案评审闭环.md`](方案评审闭环.md)），**不参与代码实现编排**，故不在上表的实现角色列。
+> `plan-reviewer`（`agents/plan-reviewer.md`）属**方案评审子系统**（实施前审方案，见 [`方案评审闭环.md`](方案评审闭环.md)），**不参与代码实现编排**，故不在上表的实现角色列。
 
-主控即主对话，无独立文件；通用角色的文件在 [`../agents/`](../agents/)，技术栈专属角色在对应技术栈子目录。
+主控即主对话，无独立文件；通用角色的文件在 `agents/`（部署位 `.claude/agents/`），技术栈专属角色在对应技术栈子目录。
 
 ---
 

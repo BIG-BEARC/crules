@@ -10,13 +10,13 @@ disable-model-invocation: true
 - **新项目**（根目录无 `CLAUDE.md`）→ 全装（进阶门控默认关）→ 引导填附录必填项
 - **老项目**（根目录已有 `CLAUDE.md`）→ 体检冲突 → 安装报告（dry-run）→ 逐条取舍 → 合并（**禁静默覆盖**）
 
-> 不必预先选规模——进阶篇自带「启用条件」门控，默认不开，用到才开（常驻成本为根 `CLAUDE.md` + `项目附录.md` 合计 ≈4.9–5.6k token，进阶篇不占常驻）。
+> 不必预先选规模——进阶篇自带「启用条件」门控，默认不开，用到才开（常驻成本为根 `CLAUDE.md` + `项目附录.md` 合计 ≈5.5–7k token（v60 实测 11.2k 字符口径），进阶篇不占常驻）。
 
 ## 执行步骤
 
 ### 0. 定位 crules 源
 
-本命令随 crules plugin 分发，模板源在 plugin cache（固定路径 `~/.claude/plugins/cache/crules-market/crules/<version>/`）。AI 优先用 `ls ~/.claude/plugins/cache/crules-market/crules/` 取**版本号最大**的目录（多版本并存，旧目录不清理）；cache 不存在（如手动 cp 部署）则问需求方 crules 模板包路径（如 `~/Downloads/ai-code/crules`）。找不到则提示需求方指定后停止。
+本命令随 crules plugin 分发，模板源在 plugin cache（固定路径 `~/.claude/plugins/cache/crules-market/crules/<version>/`）。AI 优先用 `ls ~/.claude/plugins/cache/crules-market/crules/` 取**版本号最大**的目录（多版本并存，旧目录不清理；按**语义版本**比较——`0.10.0 > 0.9.0`，勿用字典序）；cache 不存在（如手动 cp 部署）则问需求方 crules 模板包路径（如 `~/Downloads/ai-code/crules`）。找不到则提示需求方指定后停止。
 
 > **分工说明**（plugin 化后）：本命令与 `/update-memory` 等能力经 `/plugin install crules` 分发；本命令只负责把**规则文档**（CLAUDE.md / 项目附录 / 进阶 / agents / memory）cp 或合并到消费项目——能力不重复 cp。
 
@@ -31,7 +31,7 @@ disable-model-invocation: true
 
 1. 问技术栈（纯通用 / Flutter / 其他）→ 若 Flutter，提示同时装 `../flutter/`（App 或 Plugin 模板）
 2. 问安装模式（**默认轻装**）：
-   - **轻装（默认）**：项目根 `CLAUDE.md` 只写数行——`@<crules 稳定源>/CLAUDE.md` 导入行 + `## 本项目覆写` 空节。**导入行必须指向稳定路径**：优先 crules 仓库路径（如 `~/Downloads/ai-code/crules/CLAUDE.md`）。plugin cache 的 `<version>` 目录**不推荐**——plugin update 轮转版本后旧目录不清理，指向它 = **静默版本漂移**（与「更新自动生效」矛盾；确需用 cache 路径则每次 plugin update 后手动改导入行）。规则正文**单一权威在 crules 源**，源更新后本项目**下次会话自动生效**（零 cp 零合并）；项目特殊约定（提交前缀 / 术语 / 例外授权）写覆写节，**覆写优先于导入**
+   - **轻装（默认）**：项目根 `CLAUDE.md` 只写数行——`@<crules 稳定源>/CLAUDE.md` 导入行 + `## 本项目覆写` 空节。**导入行必须指向稳定路径**：优先 crules 仓库路径（如 `~/Downloads/ai-code/crules/CLAUDE.md`）。plugin cache 的 `<version>` 目录**不推荐**——plugin update 轮转版本后旧目录不清理，指向它 = **静默版本漂移**（与「更新自动生效」矛盾；确需用 cache 路径则每次 plugin update 后手动改导入行）。规则正文**单一权威在 crules 源**，源更新后本项目**下次会话自动生效**（零 cp 零合并）；**团队场景**：轻装要求 crules 仓库路径可达（成员各自 clone 或共享路径）——只装 plugin 没有仓库者选完整模式；项目特殊约定（提交前缀 / 术语 / 例外授权）写覆写节，**覆写优先于导入**
    - **完整**：`cp` 全量 `CLAUDE.md`（团队多机 / 高定制 / 不想依赖 crules 源路径时选；复制即分叉，更新须重跑本命令合并）
 3. 无论模式，其余按需文档照常复制（按需读取、不随会话常驻，`@` 导入只管根规则）：`项目附录.md` → 项目根、`进阶/` → 项目根、`agents/` → `.claude/agents/`、`memory/` → `.claude/memory/`
 4. 引导填 `项目附录.md` 的 **3 个必填**（项目名 / 技术栈 / 构建·分析·测试命令）

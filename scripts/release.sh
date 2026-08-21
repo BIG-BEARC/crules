@@ -20,7 +20,7 @@ case "$1" in
     cache_root="$HOME/.claude/plugins/cache/crules-market/crules"
     [ -d "$cache_root" ] || { echo "❌ cache 不存在: $cache_root"; exit 1; }
     latest=$(ls -v "$cache_root" | tail -1)
-    if grep -rl --include='*.md' --include='*.py' --include='*.json' -F "$feat" "$cache_root/$latest" 2>/dev/null | head -3 | grep -q .; then
+    if grep -rl --include='*.md' --include='*.py' --include='*.json' --include='*.sh' --include='*.yml' -F "$feat" "$cache_root/$latest" 2>/dev/null | head -3 | grep -q .; then
       echo "✅ cache $latest 含特征串（新版本已生效）"
     else
       echo "❌ cache $latest 不含特征串——update 未生效或特征选错"; exit 1

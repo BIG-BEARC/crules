@@ -27,8 +27,9 @@
 ## 怎么用（两条命令）
 
 ```bash
-# ① 一次性：装 crules plugin（本地路径源，user scope，不进任何项目 git）
-claude plugin marketplace add ~/Downloads/ai-code/crules --scope user
+# ① 一次性：装 crules plugin（本地路径源，user scope，不进任何项目 git；<crules 仓库路径> 替换为你机器上的实际路径）
+claude plugin marketplace add <crules 仓库路径> --scope user
+# 示例：claude plugin marketplace add ~/Downloads/ai-code/crules --scope user
 claude plugin install crules@crules-market --scope user
 
 # ② 在项目根目录跑（装好 plugin 后任何项目可用；plugin 命令带命名空间，裸名不可用）
@@ -114,7 +115,7 @@ claude plugin install crules@crules-market --scope user
 | `记忆库体系.md`（含 `business-rules.md` / `INVARIANTS.md` 约束载体） | 大项目代码索引 / 约束外化 | 重度 |
 | `插件工作流.md` | 装了 superpowers / spec-kit | 任意 |
 
-**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计 ≈4.9–5.6k token；v47 提炼 +4 条实施 / 验证纪律、v50 +2 条安全红线后的口径）；进阶全装但门控默认关，用到才开。
+**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计 ≈5.5–7k token（v60 实测 11.2k 字符口径）；v47 提炼 +4 条实施 / 验证纪律、v50 +2 条安全红线后的口径）；进阶全装但门控默认关，用到才开。
 
 ---
 
