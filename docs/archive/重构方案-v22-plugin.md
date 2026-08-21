@@ -1,6 +1,8 @@
 # 重构方案 v22 · crules plugin 化（定案）
 
-> 本方案是 v20「裸 skill 方案」经 v21 评审 + v22 plugin 实测后的**定案修订**。裸 skill 方案已放弃（见 [`archive/重构方案-v20-skills.md`](archive/重构方案-v20-skills.md) 顶部废弃标注）。本轮定案未动 `commands/` 源文件，属待执行方案。
+> **归档注记（2026-08-21 v58）**：本方案 v29 执行完成（§七 8 步全落地，plugin 化上线）；执行前经 v21 评审 / v22 实测 / v28 裁决修订——链路见 `../评审.md` Changelog。
+
+> 本方案是 v20「裸 skill 方案」经 v21 评审 + v22 plugin 实测后的**定案修订**。裸 skill 方案已放弃（见 [`archive/重构方案-v20-skills.md`](重构方案-v20-skills.md) 顶部废弃标注）。本轮定案未动 `commands/` 源文件，属待执行方案。
 >
 > **v28 决议修订（08-14，需求方裁决 R1 收口）**：① `review-review` **不进 plugin**——只服务 crules 仓库自身（审 `docs/评审.md`），留仓库本地 `.claude/commands/`；② `update-memory` **改 command**（原案 skill 与「兜底全量刷新·显式发起」定位矛盾，三分法统一为显式 command + `disable-model-invocation`）；③ plugin.json/marketplace.json 旧名已改 crules（N1）。下文已按此更新。
 
