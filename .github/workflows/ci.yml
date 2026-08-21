@@ -1,0 +1,20 @@
+# CI 门禁（待办 V1 落地）——治「记得跑」：一致性 A-H + deny-list fixture 回归 + 语法编译
+# 依赖：check-consistency.sh 已按「FAIL 即 exit 1」改造（否则 CI 恒绿，见审评 P0-2）
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: 一致性检查（A-H，FAIL 即红）
+        run: bash scripts/check-consistency.sh
+      - name: deny-list 回归（对抗样本库）
+        run: python3 hooks/test_deny_list.py
+      - name: 语法编译
+        run: python3 -m py_compile hooks/deny-list.py hooks/test_deny_list.py hooks/pending-updates.py

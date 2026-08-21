@@ -1,0 +1,7 @@
+# 本机环境（保护随仓库走，不依赖各机全局 gitignore——审评 P0-4）
+.claude/settings.local.json
+.claude/worktrees/
+
+# 通用垃圾
+.DS_Store
+__pycache__/
