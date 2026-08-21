@@ -1,11 +1,13 @@
 {
   "name": "crules-market",
-  "owner": { "name": "chuxiong" },
+  "owner": {
+    "name": "chuxiong"
+  },
   "plugins": [
     {
       "name": "crules",
       "source": "./",
-      "version": "0.2.2",
+      "version": "0.2.4",
       "description": "crules 项目协作规则模板包"
     }
   ]

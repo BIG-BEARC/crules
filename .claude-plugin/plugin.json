@@ -1,6 +1,8 @@
 {
   "name": "crules",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "crules——CLAUDE.md 协作规则模板包 + agents + memory + commands",
-  "author": { "name": "chuxiong" }
+  "author": {
+    "name": "chuxiong"
+  }
 }
