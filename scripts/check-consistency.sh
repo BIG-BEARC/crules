@@ -16,10 +16,14 @@ trap 'rm -f "$tmp"' EXIT
 exec 3>"$tmp"
 
 echo "== A. 悬空相对链接（排除 archive 与 NAVIGATION 占位）=="
+# 包外链接（如 ../flutter）不在本节验存在性——兄弟目录不随仓库分发，CI 自包含 checkout 必假阳性（v48 实证：
+# 本机因 ../flutter 存在而绿、CI 因无兄弟目录报 4 悬空 exit 1）；越包判定归 F 查管辖
 lsmd | while IFS= read -r f; do
   dir=$(dirname "$f")
   grep -oE '\]\([^)#]+\.md' "$f" 2>/dev/null | sed 's/](//' | while IFS= read -r link; do
     case "$f" in memory/NAVIGATION.md) case "$link" in indexes/*) continue;; esac;; esac
+    esc=$(python3 -c "import os;print('ESCAPE' if os.path.normpath(os.path.join('$dir','$link')).startswith('..') else '')" 2>/dev/null)
+    if [ -n "$esc" ]; then continue; fi
     [ -f "$dir/$link" ] || echo "  悬空: $f → $link" >&3
   done
 done
