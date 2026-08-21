@@ -95,7 +95,7 @@ claude plugin install crules@crules-market --scope user
 | `记忆库体系.md`（含 `business-rules.md` / `INVARIANTS.md` 约束载体） | 大项目代码索引 / 约束外化 | 重度 |
 | `插件工作流.md` | 装了 superpowers / spec-kit | 任意 |
 
-**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计 ≈4.6–5.3k token；v47 提炼 +4 条实施 / 验证纪律后的口径）；进阶全装但门控默认关，用到才开。
+**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计 ≈4.9–5.6k token；v47 提炼 +4 条实施 / 验证纪律、v50 +2 条安全红线后的口径）；进阶全装但门控默认关，用到才开。
 
 ---
 
@@ -114,7 +114,7 @@ claude plugin install crules@crules-market --scope user
 | `agents/` | 各角色 agent 描述（启用 Agent 编排时的配套资源） | 用 Agent 编排时 |
 | `memory/` | 记忆库目录框架：`NAVIGATION.md`（导航入口）/ `MAINTENANCE.md`（自动维护规则）/ `patterns.md` / `business-rules.md`（业务规则·软约束）/ `INVARIANTS.md`（技术不变量·硬约束）；`indexes/`、`decisions/` 为启用记忆库后按需创建（NAVIGATION 中为占位示例） | 用记忆库时 |
 | `commands/` | 2 个 slash 命令（均 `disable-model-invocation`，显式发起）：`crules-init`（初始化新/老项目）/ `update-memory`（重建代码索引）——**经 plugin 分发**，不随 cp 走 | 装为 Claude Code plugin 时 |
-| `hooks/` | **破坏性命令 deny-list 硬闸**（PreToolUse，无意图判断、deny-by-default，被拦即请人工执行；名单非穷尽——安全网而非沙箱，终极防线是原生权限确认）+ 记忆库漂移提醒队列（PostToolUse）——随 plugin 分发零配置，`hooks/test_deny_list.py` 为对抗样本库 | 随 plugin 自动生效 |
+| `hooks/` | **破坏性命令 deny-list 硬闸**（PreToolUse，无意图判断、deny-by-default，被拦即请人工执行；名单非穷尽——安全网而非沙箱，终极防线是原生权限确认；**覆盖矩阵见 `hooks/deny-list.py` 头注**——哪些拦 / 哪些归 prompt 与原生权限）+ 记忆库漂移提醒队列（PostToolUse）——随 plugin 分发零配置，`hooks/test_deny_list.py` 为对抗样本库 | 随 plugin 自动生效 |
 
 ---
 

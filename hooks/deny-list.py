@@ -16,8 +16,13 @@
 # 边界与局限（诚实声明）：
 #   - 非锚定搜索会把字符串里的破坏命令一并拦下（如 echo '…git reset --hard…'）——按
 #     deny-by-default 哲学接受，误拦走白名单调整
-#   - **黑名单无法穷尽**（变量拼接 / 嵌套 eval / 写脚本再执行等不在防线内）——本 hook 是
-#     安全网而非沙箱，终极防线是 Claude Code 原生权限确认与需求方审阅
+#   - **黑名单无法穷尽**——本 hook 是安全网而非沙箱，终极防线是 Claude Code 原生权限确认与需求方审阅
+# 覆盖矩阵（C7，v50——哪些风险由谁兜底）：
+#   | 风险类别                                                      | hook | 其余兜底 |
+#   | git 破坏族（强推/硬重置/强删分支/丢弃工作区/clean/stash clear） | ✅拦 | fixture 回归；误拦走白名单 |
+#   | rm 递归+强制（含 xargs 注入的空操作数形态）                    | ✅拦 | /tmp·/var/folders 白名单（normpath） |
+#   | chmod -R / chown -R / find -delete / python -c 删文件         | ❌   | 根规则「风险操作先确认」+ 原生权限确认 |
+#   | 变量拼接 / 嵌套 eval / 写脚本再执行 / stdin 注入路径            | ❌   | 同上（黑名单无法穷尽，归需求方审阅） |
 # v47 收口（红→绿 fixture 先行）：push/branch/force_switch 旗标判定统一走 parse_flags（拆捆绑短旗标，-fv/-qf/-D 等价拼法一次收敛）；
 #   push dry-run×force 组合信号即拦（裁定 B：clean -nd 是正当诊断、push -fn 不是，不对称有理由）；rm 空操作数拦（deny-by-default：
 #   空操作数 rm -rf 为静默 no-op，典型场景即 xargs/stdin 注入）；重定向 token 剥离后再判白名单（修 /tmp/x 2>/dev/null 误拦）
@@ -33,6 +38,7 @@ if not cmd.strip():
     sys.exit(0)
 
 def blocked(reason):
+    reason += "；请需求方人工执行，不要尝试绕过（如需展示命令，直接在回复中写文本）"
     print(json.dumps({"decision": "block", "reason": reason}, ensure_ascii=False))
     sys.exit(0)
 
