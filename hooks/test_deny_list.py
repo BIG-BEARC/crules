@@ -123,6 +123,14 @@ def main() -> int:
     for c in ALLOW_CASES:
         if should_block(c):
             fails.append(f"应放未放: {c!r}")
+    # v52：拦截文案回归断言（blocked() 单出口追加「不要尝试绕过」——拦/放二元测不出文案回归）
+    p = subprocess.run(
+        [sys.executable, os.path.join(HERE, "deny-list.py")],
+        input=json.dumps({"tool_input": {"command": "git push --force origin main"}}),
+        capture_output=True, text=True,
+    )
+    if "不要尝试绕过" not in p.stdout:
+        fails.append("拦截文案缺「不要尝试绕过」提示（blocked() 追加语回归）")
     for f in fails:
         print("FAIL", f)
     print(f"deny-list 测试: {len(BLOCK_CASES)} 拦 + {len(ALLOW_CASES)} 放, 失败 {len(fails)}")

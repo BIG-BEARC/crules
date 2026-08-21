@@ -40,7 +40,7 @@ claude plugin install crules@crules-market --scope user
 `/crules-init` 自动检测新/老项目：
 
 - **新项目**（无 `CLAUDE.md`）→ 全装（进阶门控默认关，用到才开）→ 引导填附录必填项
-- **老项目**（有 `CLAUDE.md`）→ 体检规则冲突 → 安装报告（dry-run，确认前零写入）→ 逐条取舍 → 合并（**禁静默覆盖**）
+- **老项目**（有 `CLAUDE.md`）→ 体检规则冲突 → 安装报告（dry-run，确认前不动任何既有文件）→ 逐条取舍 → 合并（**禁静默覆盖**）
 
 不必预先选规模——进阶篇自带「启用条件」门控，默认不开，用到才开。`CLAUDE.md` 放项目根，启动时自动加载，红线 / 流程 / 提交策略直接生效。
 
@@ -75,7 +75,7 @@ claude plugin install crules@crules-market --scope user
 
 0. **硬护栏**：`git status` 确认工作树干净（不干净先 commit/stash）→ 现有 CLAUDE.md 与 `.claude/` 资产打时间戳备份——**全程可回退**
 1. **体检冲突**：逐条列出老规则 vs crules 规则差异（提交策略 / 双 Gate / 验证 / 范围边界……），标「仅老项目有 / 仅 crules 有 / 双方都有但不同」
-1.5. **安装报告（dry-run）**：汇总全景表（写入目标 / 冲突概览 / 备份计划 / 不动清单）——**你确认报告才进取舍，不确认到此为止，零写入**
+1.5. **安装报告（dry-run）**：汇总全景表（写入目标 / 冲突概览 / 备份计划 / 不动清单）——**你确认报告才进取舍，不确认到此为止，既有文件原样不动**
 2. **你逐条裁决**：保留老的 / 用 crules 的 / 融合（说明怎么融）
 3. **生成合并 CLAUDE.md**：取舍记录落 `.claude/memory/decisions/`（留审计）；也可产轻装形态（`@` 导入 + 老规则整体放覆写节）
 4. **附录对齐**：把老项目实际命令 / 红线填进附录，不重复造
@@ -96,6 +96,7 @@ claude plugin install crules@crules-market --scope user
 | `agents/` | `.claude/agents/` |
 | `memory/` | `.claude/memory/` |
 | `docs/` | **不复制**——评审 / 重构方案 / CHANGELOG 属 crules 仓库自身的维护资产，消费项目无需 |
+| `scripts/` 与 `.github/`、`.gitignore` | **不复制**——crules 自身的门禁与发布辅助（CI / 一致性检查 / deny-list fixture / 发布脚本 / 行为探针）；消费项目需要时**自建自己的**（一致性脚本与 CI 形态可参考本仓库） |
 
 > 命令（crules-init / update-memory）**不走 cp**——经 plugin 分发（上方「怎么用」①步），`claude plugin update` 即更新；`review-review` 是 crules 仓库内部命令，在仓库本地 `.claude/commands/`，不随包分发。**hooks 亦随 plugin 自带**：破坏性命令 deny-list 硬闸（`git push --force` / `reset --hard` / `clean -f` / `branch -D` / `rm -rf` 等，被拦即提示人工执行），消费项目零配置获得。
 

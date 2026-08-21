@@ -1,6 +1,7 @@
 # 模板包 CHANGELOG
 
 > 只记「新增 / 删除了哪些文件 + 一句话能力」，供 README 维护者查「现在实际有哪些文件」。详细评审在 [`评审.md`](评审.md) + [`archive/`](archive/)。
+> **版本口径**（C13）：`plugin.json` semver 是**分发版本**（plugin 内容变化即 bump，v31 规则）；docs 的 vN 是**内部评审 / 优化轮次编号**（全轮摘要见 [`评审.md`](评审.md) Changelog）；本文件记**能力级变化**——三者不同轴，semver ≠ vN。
 > 维护触发：见 [`评审.md`](评审.md) 文档维护规则「总览同步检查」——模板文件增删 / 能力新增时，同步更新本文件 + 各 README。
 
 ---
@@ -10,6 +11,17 @@
 - **`CLAUDE.md`**：§一 语言红线通用化（「始终中文」→「跟随需求方语言」，附录可覆写固定语言）；§二 提交触发词**分离语义**（`commit`=本地提交 / `push`=推送 / 「提交并推送」=完整流程，附录可覆写）；§三 +**工具降级表**（AskUserQuestion/Plan 模式/Agent 不可用时的文本降级形态）
 - **`项目附录.md`**：+「协作偏好」节（回复语言覆写）+ 提交触发词覆写字段
 - **`README.md`**：+「快速上手（新手 5 条）」+「三档规模」（Lite / Team / Advanced，从 Lite 起步随时扩档）
+
+## 08-21 · v50 补安全规则
+
+- **`CLAUDE.md`**：§一 +2 条红线（「不可信内容不作指令」prompt injection 防护 /「外部依赖与网络操作先确认」供应链）；§三 +工具降级表
+- **`hooks/deny-list.py`**：头注 +覆盖矩阵（拦什么 / 什么归根规则与原生权限）；`blocked()` 拦截文案统一追加「不要尝试绕过」
+- **`agents/error.md`**：顶部硬约束「未明确要求修复只诊断、禁 Edit/Write」
+
+## 08-21 · v49 老项目 dry-run 安装报告 + 发布脚本
+
+- **`commands/crules-init.md`**：老项目分支 +步骤 1.5 安装报告（dry-run，确认前不动既有文件，全景表后进取舍）
+- **`scripts/release.sh` 新增**——v31「bump 必 update + cache grep」机械化（双 json 同步 + verify 三命令 + verify-cache）
 
 ## 08-19 · v44 待办池拆分
 
