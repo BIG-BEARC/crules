@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # crules 一致性检查（v13续 B2 机械化底座）——治「纪律写了≠生效」的 L14 类复发
 # 检查项：A 悬空相对链接 / B 旧名残留 / C README 清单一致 / D 段落级文字指针 / E 归档引用实存
-#         / F 跨包相对链接 / G plugin 版本号 / H deny-list 回归
+#         / F 跨包相对链接 / G plugin 版本号 / H deny-list 回归 / I 元账本（A/B2 机械化）
 # 白名单：docs/archive（历史）；docs/CHANGELOG.md 与 docs/评审.md（历史记述密集，多次人工核可免责）；
 #         memory/NAVIGATION.md 的 indexes/ 占位链接（L9/L58 已注「启用记忆库时创建」）
 # 用法：bash scripts/check-consistency.sh —— 末行 PASS = 通过；FAIL N = N 条问题待处置
@@ -76,6 +76,14 @@ echo "== H. deny-list 回归测试（对抗样本库，新增绕过先加 fixtur
 hout=$(python3 hooks/test_deny_list.py 2>&1); hrc=$?
 [ $hrc -eq 0 ] || { printf '%s\n' "$hout" | sed 's/^/  /'; echo "  deny-list 回归失败（rc=$hrc，详见上方输出）" >&3; }
 
+echo "== I. 元账本（A/B2 机械化，v55：已办残留不滞留 / 已关闭表不膨胀）=="
+# I1 待办池表格行级别列为 ✅ = 已办未删行（应移评审.md 已关闭表；只认级别列精确 ✅，说明文字提及不算）
+i1=$(grep -E '^\|[^|]*\| ✅ \|' docs/待办.md 2>/dev/null || true)
+[ -n "$i1" ] && printf '%s\n' "$i1" | sed 's/^/  待办池已办残留: /' >&3
+# I2 已关闭表 >8 行 = 触发 L11 归档
+i2=$(awk '/^## 已关闭/{f=1;next} /^## /{f=0} f&&/^\| \*\*/{n++} END{if(n>8)print "已关闭表 " n " 行 >8，按 L11 批量归档 archive"}' docs/评审.md)
+[ -n "$i2" ] && echo "  $i2" >&3
+
 exec 3>&-
 grep . "$tmp"
 fails=$(grep -c . "$tmp")
@@ -83,4 +91,4 @@ if [ "$fails" -gt 0 ]; then
   echo "== FAIL $fails（以上逐条处置，退出码 1）=="
   exit 1
 fi
-echo "== PASS（A-H 全绿）=="
+echo "== PASS（A-I 全绿）=="
