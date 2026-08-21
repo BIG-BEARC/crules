@@ -161,6 +161,12 @@ claude plugin install crules@crules-market --scope user
 
 ---
 
+## License
+
+MIT——见 [`LICENSE`](LICENSE)：可自由复用、修改、再分发（保留版权与许可声明即可）。
+
+---
+
 ## 来源说明
 
 本包从多份实战方法论整合提炼，已剔除原项目业务与技术栈细节，保留纯方法论：

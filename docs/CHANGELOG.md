@@ -6,6 +6,11 @@
 
 ---
 
+## 08-21 · v61 外审政策矛盾收口（git 分层头注 ×4 + LICENSE，plugin 0.3.2）
+
+- **`LICENSE` 新增**（MIT）+ `README.md` License 节——「可直接复用」定位补法律基础
+- **`memory/README.md` / `business-rules.md` / `INVARIANTS.md` + `进阶/记忆库体系.md`**：四处「不进 git」旧政策头注（v18-C 落地前的残留）改引 `MAINTENANCE.md`「git 分层」单一权威——制度资产进 git / 生成物不进；一致性脚本查不了政策语义，外审实测抓出
+
 ## 08-21 · v60 外部复核收口（部署死链 / 物理锁 / 易用性，plugin 0.3.1）
 
 - **`进阶/`×4 + `进阶/README.md`**：10 处 `../agents|../memory|../commands` 链接反引号化（部署位说明）——v56 只收了越包链接，本轮补齐复制映射断链（进阶→项目根、agents/memory 下沉 `.claude/`、commands 不复制）
