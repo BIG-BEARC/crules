@@ -35,6 +35,16 @@
 
 不写完整 API 文档（源码的事）· 不复制代码（引用源文件路径）· 不记生成文件 · 不记 git 能查到的信息。
 
+## git 分层（团队共享 vs 本机生成，v18-C）
+
+- **进 git（制度资产，团队共享）**：本文件 / `patterns.md` / `business-rules.md` / `INVARIANTS.md` / `decisions/`——规则与决策是团队资产
+- **不进 git（本机生成物，可重建）**：`indexes/`（代码索引）与 `.pending-updates`（漂移队列）——消费项目 `.gitignore` 加：`.claude/memory/indexes/`、`.claude/memory/.pending-updates`
+- 同理：`.claude/settings.json`（团队共享的权限 / hooks 配置）**进 git**；`settings.local.json` **永不进**（本机私有）
+
+## 规模演进触发（v11-②）
+
+单文件规则条目 **>15 条**或**多域混杂**时，再启动分域（`rules/` 目录 + 活跃·历史分离 + 标签索引）——冷启动期「单文件 + 索引表」就是正确形态，**勿过早分域**。
+
 ## 自检清单（每轮对话结束前）
 
 - [ ] `.claude/memory/.pending-updates` 非空？（PostToolUse 自动记录的漂移队列——本轮改过哪些源文件，对应索引补了吗？补完清空该文件）

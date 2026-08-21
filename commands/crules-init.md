@@ -66,6 +66,7 @@ disable-model-invocation: true
 5. **进阶 / agents / memory 体检合并**（**不是** `cp -r` 一把梭）：
    - **进阶/**：老项目若已有 `进阶/` 同名文件 → 同 CLAUDE.md 流程（体检→取舍→合并），冲突落 `decisions/`；无则直接复制
    - **`.claude/agents|memory`**：老项目若已有同名 → **默认保留老项目的**（那是该项目的真资产），crules 的同名文件作为参考并排（如 `crules-plan-reviewer.md`）或按需求方取舍；**禁止覆盖老项目既有文件**。无则直接复制
+   - **历史文档纳管体检**：项目散落的方案 / 评审 / 复盘类历史文档（项目根 / `docs/` 等），按「**分级**（时效敏感 / 知识沉淀 / 过程性）→ **信任 L0 快照**（历史文档不作事实依据，只作线索）→ **纳管 / 隔离**（知识沉淀类迁入 `.claude/memory/business-rules.md` 或 `decisions/`；时效敏感与过程性迁项目 `archive/` 留档）→ **迁移即验证**（迁后引用可达、无孤儿）」体检并逐条裁决，**禁止静默删除**
    - 老项目无 `.claude/` 目录时，方可 `cp -r` crules 的 agents/memory（无冲突 = 安全）；commands 不 cp（能力经 plugin 分发）
 
 ### 3. 收尾
