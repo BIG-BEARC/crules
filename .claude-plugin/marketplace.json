@@ -7,7 +7,7 @@
     {
       "name": "crules",
       "source": "./",
-      "version": "0.3.3",
+      "version": "0.4.0",
       "description": "crules 项目协作规则模板包"
     }
   ]
