@@ -97,7 +97,7 @@ claude plugin install crules@crules-market --scope user
 | `agents/` | `.claude/agents/` |
 | `memory/` | `.claude/memory/` |
 | `docs/` | **不复制**——评审 / 重构方案 / CHANGELOG 属 crules 仓库自身的维护资产，消费项目无需 |
-| `scripts/` 与 `.github/`、`.gitignore` | **不复制**——crules 自身的门禁与发布辅助（CI / 一致性检查 / deny-list fixture / 发布脚本 / 行为探针）；消费项目需要时**自建自己的**（一致性脚本与 CI 形态可参考本仓库） |
+| `scripts/` 与 `.github/`、`.gitignore` | **不复制**——crules 自身的门禁与发布辅助（CI / 一致性检查 / deny-list fixture / 发布脚本 / 行为探针）；消费项目需要时**自建自己的**（一致性脚本与 CI 形态可参考本仓库）。**例外**：`scripts/install.sh`（新项目安装器）与 `scripts/check-imports.sh`（导入巡检）由 `/crules:crules-init` 调用或消费方手动跑（plugin cache 内即可用，无需复制） |
 
 > 命令（crules-init / update-memory）**不走 cp**——经 plugin 分发（上方「怎么用」①步），`claude plugin update` 即更新；`review-review` 是 crules 仓库内部命令，在仓库本地 `.claude/commands/`，不随包分发。**hooks 亦随 plugin 自带**：破坏性命令 deny-list 硬闸（`git push --force` / `reset --hard` / `clean -f` / `branch -D` / `rm -rf` 等，被拦即提示人工执行），消费项目零配置获得。
 
