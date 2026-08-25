@@ -133,7 +133,7 @@ claude plugin install crules@crules-market --scope user
 | `记忆库体系.md`（含 `business-rules.md` / `INVARIANTS.md` 约束载体） | 大项目代码索引 / 约束外化 | 重度 |
 | `插件工作流.md` | 装了 superpowers / spec-kit | 任意 |
 
-**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计 ≈5.5–7k token（v60 实测 11.2k 字符口径）；v47 提炼 +4 条实施 / 验证纪律、v50 +2 条安全红线后的口径）；进阶全装但门控默认关，用到才开。
+**精髓**：`CLAUDE.md` 零依赖、单独可用，作为根规则常驻会话（与 `项目附录.md` 合计 ≈6.5–8k token（v73 实测 26.2k 字符——v65/v66 +3 条纪律后复测；历史口径 5.5–7k 为 v60 时点）；进阶全装但门控默认关，用到才开。
 
 ---
 

@@ -106,7 +106,7 @@ echo "== J. 孪生表断言（W1/v69：twin 锚点成对 + 数据行数一致）
 # 孪生双份曾靠注释人肉同步、已漂移过一次（git 政策 v61）；现锚点机器看守——行数不等即漂移
 # 范围限分发 md：docs/ 记账文档常含锚点字样的「文档性引用」（CHANGELOG 记本轮改动等），非真锚点
 lsmd | grep -v '^docs/' | while IFS= read -r f; do
-  grep -n '<!-- twin:' "$f" 2>/dev/null | sed -E 's/^([0-9]+):<!-- *twin: *([A-Za-z0-9_-]+) *-->.*/\2 \1/' | while IFS=' ' read -r name ln; do
+  grep -n '^<!-- *twin:' "$f" 2>/dev/null | sed -E 's/^([0-9]+):<!-- *twin: *([A-Za-z0-9_-]+) *-->.*/\2 \1/' | while IFS=' ' read -r name ln; do
     n=$(awk -v s="$((ln+1))" 'NR>=s && /^\|/{c++; next} NR>s && c>0{exit} END{print c+0}' "$f")
     echo "$name $n $f:$ln"
   done
