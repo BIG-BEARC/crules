@@ -6,6 +6,20 @@
 
 ---
 
+## 08-25 · v69 政策收敛治本——J/K 查 + fixture 模式（W1 收口，plugin 0.5.0，minor）
+
+- **`scripts/check-consistency.sh`**：+**J 查**（孪生表断言——`<!-- twin:* -->` 锚点成对 + 数据行数一致，漂移即 CI 红；孪生双份从注释人肉同步升机器看守）+ **K 查**（政策声明归口——旧政策特征串「不进 git/整体 gitignore/纯本地」只许出现在 MAINTENANCE 政策表）+ **fixture 模式**（`CONSISTENCY_ROOT=<目录>` 对任意目录跑 A-F/J/K，G/H/I/C 跳过——检查器终于能测自己）
+- **四处 twin 锚点**：触发即更新表（MAINTENANCE↔记忆库体系）、文件结构表（memory/README↔记忆库体系）；MAINTENANCE 头注加孪生声明（自包含 vs 单一权威的消解：保持双份 + 机器看守）
+- **顺手修真漂移**：K 查预检抓出 记忆库体系「与项目文档的分工」表仍写 `.claude/memory/ ❌ AI 私有`——v61 修头注时漏扫的内嵌表，已对齐 v18-C 新政策（制度资产 ✅ / 生成物 ❌ 分行）
+- **`scripts/test-self.sh`** 扩至六断言（+fixture 干净 PASS / 坏样本红 / 孪生漂移红），红→绿修 2 处（J 锚点豁免 fixture、C 查跳过 fixture）
+
+## 08-24 · v68 平台信任声明 + 易用小项群（W2④⑤收口，plugin 0.4.3）
+
+- **`README.md`**：+「环境要求与更新信任」节（macOS/Linux、Windows hook 静默失效声明；plugin update 供应链提示——update 前 diff hooks/、团队锁 commit）；+git URL marketplace 安装（Team 档免各自 clone）；+「卸载（停用）」节（全局/轻装/完整/合并态/memory 资产区分五层）；+`.claude/memory` 与原生记忆撞名消歧；hooks 行前移**误拦取舍**（文本含破坏命令字样也会拦，展示命令写文本别经 Bash）
+- **`进阶/术语表.md` 新增**——24 术语一行一注（定义+权威出处），第二人入门钥匙（bus factor=1 最低成本解）
+- **`commands/crules-init.md`**：附录引导时提示**提速档**减压阀与大需求触发词映射；**`项目附录.md`**：+「大需求触发的本项目映射」字段（触发词去移动端形状）
+- **`scripts/test-self.sh` 新增** + ci.yml 加一步——脚本自测三断言（install 老项目中止 / 巡检断链 / release 非法版本号，应报错即 PASS 3/3）；完整版 fixture（check-consistency 对坏样本目录）留 W1 与 J 查同轮
+
 ## 08-24 · v67 安装脚本化——install.sh（W2②，plugin 0.4.2）
 
 - **`scripts/install.sh` 新增**——新项目安装的确定性部分脚本化：lite/full 两模式（导入行+覆写节+版本戳 / 头戳+全文）、按需复制附录/进阶/agents/memory、`--dry-run` 安装报告、默认跳过已存在（禁静默覆盖）、`--force` 覆盖重装；**老项目护栏**（无戳 CLAUDE.md → 中止走 AI 合并分支，有戳 → 重装）；cache 源警告（lite 导入行指 cache 的静默漂移）；五情形自测过（lite/full/幂等 18 SKIP/老项目中止/巡检联通）——自测中修掉 3 处（sys 导入漏、幂等被护栏误拦、full 戳位置）
