@@ -22,3 +22,6 @@ jobs:
       - name: 语法编译
         if: always()
         run: python3 -m py_compile hooks/deny-list.py hooks/test_deny_list.py hooks/pending-updates.py
+      - name: 脚本自测（应报错断言，v68）
+        if: always()
+        run: bash scripts/test-self.sh

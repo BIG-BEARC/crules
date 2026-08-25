@@ -36,7 +36,10 @@ claude plugin install crules@crules-market --scope user
 /crules:crules-init
 ```
 
-> `/crules:crules-init` 默认装**轻装模式**：项目根 `CLAUDE.md` 仅数行（`@` 导入 crules 源 + 本项目覆写节），规则更新**下次会话自动生效**、零复制零合并；可选**完整模式**全量 cp（团队多机 / 不依赖本机源路径时选）。进阶 / agents / memory 两种模式都照常复制。
+> **团队 / 远程源**：marketplace 也支持 git URL（成员无需各自 clone 本地路径，Team 档推荐）：
+> `claude plugin marketplace add <crules 仓库 git URL> --scope user`（如 `https://github.com/<org>/crules.git`；团队可锁定 commit / 分支控制更新节奏，见下「更新信任」）
+
+> `/crules:crules-init` 默认装**轻装模式**：项目根 `CLAUDE.md` 仅数行（`@` 导入 crules 源 + 本项目覆写节），规则更新**下次会话自动生效**、零复制零合并；可选**完整模式**全量 cp（团队多机 / 不依赖本机源路径时选）。进阶 / agents / memory 两种模式都照常复制。**消歧**：`.claude/memory/`（项目记忆库资产，本包概念）与 Claude Code 原生 memory（AI 个人记忆目录）是两回事——本包的 memory 是项目内共享资产，按 [MAINTENANCE](memory/MAINTENANCE.md) git 分层政策管理。
 
 `/crules-init` 自动检测新/老项目：
 
@@ -46,6 +49,21 @@ claude plugin install crules@crules-market --scope user
 不必预先选规模——进阶篇自带「启用条件」门控，默认不开，用到才开。`CLAUDE.md` 放项目根，启动时自动加载，红线 / 流程 / 提交策略直接生效。
 
 > 不想用命令？手动 `cp` 见下方「复制目标路径」+「文件清单」，按需复制。
+
+### 环境要求与更新信任
+
+- **环境要求：macOS / Linux**。hooks 依赖 `python3` 与 `fcntl`（Unix）；**Windows 上两个 hook 会静默不生效**（deny-list 硬闸、漂移队列均失效）——此时终极防线回到 Claude Code 原生权限确认与人工审阅，请知悉再安装。
+- **更新信任（供应链）**：本 plugin 的 hooks 在每次 Bash 调用前执行——`plugin update` 后新 hook 代码**静默生效**，被污染的更新等于每次 shell 命令的任意代码执行。建议：git 源消费方 **update 前先看 hooks 变更**（`git -C <crules 仓库> diff <旧tag>..<新tag> -- hooks/`）；团队 marketplace 可**锁定 commit** 而非跟随分支，更新经人工审阅。
+
+### 卸载（停用）
+
+| 层 | 操作 |
+|---|---|
+| 全局能力（plugin，所有项目） | `claude plugin disable crules@crules-market`（可逆，`enable` 恢复）；彻底卸 `claude plugin uninstall crules@crules-market` + `claude plugin marketplace remove crules-market` |
+| 单项目·轻装 | 删项目 `CLAUDE.md` 里的 `@` 导入行与版本戳即停；「本项目覆写」节是你自己的，留删随你 |
+| 单项目·完整 | 删/还原 `CLAUDE.md`、`项目附录.md`、`进阶/`、`.claude/agents/` 三角色 |
+| 老项目合并态 | **不能整删**（混有你的老规则）——对照 `.claude/memory/decisions/` 取舍记录与 `CLAUDE.md.bak.*` 备份逐段摘除 |
+| `.claude/memory/` 去留 | **删模板**（NAVIGATION / MAINTENANCE / README）；**留沉淀**（patterns / business-rules / INVARIANTS / decisions——那是你项目的知识，与 crules 去留无关）；indexes / .pending-updates 随手删 |
 
 ### `/crules:crules-init` 会做什么（向导流程）
 
@@ -134,7 +152,7 @@ claude plugin install crules@crules-market --scope user
 | `agents/` | 各角色 agent 描述（启用 Agent 编排时的配套资源） | 用 Agent 编排时 |
 | `memory/` | 记忆库目录框架：`NAVIGATION.md`（导航入口）/ `MAINTENANCE.md`（自动维护规则）/ `patterns.md` / `business-rules.md`（业务规则·软约束）/ `INVARIANTS.md`（技术不变量·硬约束）；`indexes/`、`decisions/` 为启用记忆库后按需创建（NAVIGATION 中为占位示例） | 用记忆库时 |
 | `commands/` | 2 个 slash 命令（均 `disable-model-invocation`，显式发起）：`crules-init`（初始化新/老项目）/ `update-memory`（重建代码索引）——**经 plugin 分发**，不随 cp 走 | 装为 Claude Code plugin 时 |
-| `hooks/` | **破坏性命令 deny-list 硬闸**（PreToolUse，无意图判断、deny-by-default，被拦即请人工执行；名单非穷尽——安全网而非沙箱，终极防线是原生权限确认；**覆盖矩阵见 `hooks/deny-list.py` 头注**——哪些拦 / 哪些归 prompt 与原生权限）+ 记忆库漂移提醒队列（PostToolUse）——随 plugin 分发零配置，`hooks/test_deny_list.py` 为对抗样本库 | 随 plugin 自动生效 |
+| `hooks/` | **破坏性命令 deny-list 硬闸**（PreToolUse，无意图判断、deny-by-default，被拦即请人工执行；名单非穷尽——安全网而非沙箱，终极防线是原生权限确认；**覆盖矩阵见 `hooks/deny-list.py` 头注**——哪些拦 / 哪些归 prompt 与原生权限；**误拦取舍**：文档 / echo 文本里含 `git reset --hard` 等字样也会被拦——deny-by-default 的已知代价，要展示命令请在回复中直接写文本、不经 Bash 执行）+ 记忆库漂移提醒队列（PostToolUse）——随 plugin 分发零配置，`hooks/test_deny_list.py` 为对抗样本库 | 随 plugin 自动生效 |
 
 ---
 
