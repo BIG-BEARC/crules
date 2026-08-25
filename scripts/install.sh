@@ -56,7 +56,7 @@ echo "== crules 安装报告（mode=$MODE ver=v$VER$( [ "$DRYRUN" = "1" ] && ech
 # 0. 老项目护栏：已有 CLAUDE.md 且**无 crules 版本戳** → 中止（真老项目，合并归 AI 流程）；
 #    有戳（本脚本或 init 装的）→ 允许重跑（默认跳过已存在；--force 覆盖重装）
 if [ -f "$TARGET/CLAUDE.md" ]; then
-  if ! grep -q '<!-- crules: v' "$TARGET/CLAUDE.md"; then
+  if ! grep -qE '<!-- crules: v[0-9]' "$TARGET/CLAUDE.md"; then  # v[0-9]：vunknown 戳不放行重装（v71 meta-review 🟢#4）
     echo "❌ 目标已有 CLAUDE.md（无 crules 戳）——这是老项目，走 /crules:crules-init 老项目分支（体检→取舍→合并，禁静默覆盖）；本脚本只装新项目"
     exit 1
   fi

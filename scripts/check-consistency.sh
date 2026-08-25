@@ -119,11 +119,11 @@ elif [ -z "${CONSISTENCY_ROOT:-}" ]; then
 fi
 
 echo "== K. 政策声明归口（W1/v69：旧政策特征串只许出现在 MAINTENANCE 政策表）=="
-# 特征串收窄为旧政策三特征（不进 git / 整体 gitignore / 纯本地）——正向新政策表述（制度资产进 git）合法
+# 特征串 = 旧政策四特征（不进 git / 整体 gitignore / 纯本地 / AI 私有——v69 修的漂移恰是此表述，v71 补看守）；正向新政策表述（制度资产进 git）合法
 for f in CLAUDE.md README.md 项目附录.md agents/*.md commands/*.md memory/*.md 进阶/*.md; do
   [ -f "$f" ] || continue
   case "$f" in memory/MAINTENANCE.md) continue;; esac   # 政策表本体
-  grep -n '不进 git\|整体 gitignore\|纯本地' "$f" 2>/dev/null | cut -d: -f1 | while IFS= read -r no; do
+  grep -n '不进 git\|整体 gitignore\|纯本地\|AI 私有' "$f" 2>/dev/null | cut -d: -f1 | while IFS= read -r no; do
     echo "  政策外声明: $f:$no（git 纳管政策单一权威在 memory/MAINTENANCE.md「git 分层」）"
   done
 done >&3

@@ -17,6 +17,7 @@ printf '@/tmp/crules-selftest/nonexist/CLAUDE.md\n' > "$D/broken/CLAUDE.md"  # �
 t "install.sh 老项目（无戳）应中止" 1 "bash $CRULES_SRC/scripts/install.sh $D/oldproj"
 t "check-imports.sh 断链应非零"     1 "bash $CRULES_SRC/scripts/check-imports.sh $D/broken"
 t "release.sh 非法版本号应报错"     1 "bash $CRULES_SRC/scripts/release.sh abc"
+t "release.sh draft 应正常出稿"     0 "bash $CRULES_SRC/scripts/release.sh draft"
 
 # fixture 模式（v69/W1 完整版：check-consistency 对任意目录跑 A-F/J/K，G/H/I 跳过）
 printf '# 干净文档\n\n正文无链接无特征串。\n' > "$D/fix-good/doc.md"

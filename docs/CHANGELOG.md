@@ -6,7 +6,7 @@
 
 ---
 
-## 08-25 · v69 政策收敛治本——J/K 查 + fixture 模式（W1 收口，plugin 0.5.0，minor）
+## 08-25 · v69 政策收敛治本——J/K 查 + fixture 模式（W1 收口，plugin 0.5.1，minor——0.5.0 后 J 查 docs 豁免补修再 bump，v71 补账）
 
 - **`scripts/check-consistency.sh`**：+**J 查**（孪生表断言——`<!-- twin:* -->` 锚点成对 + 数据行数一致，漂移即 CI 红；孪生双份从注释人肉同步升机器看守）+ **K 查**（政策声明归口——旧政策特征串「不进 git/整体 gitignore/纯本地」只许出现在 MAINTENANCE 政策表）+ **fixture 模式**（`CONSISTENCY_ROOT=<目录>` 对任意目录跑 A-F/J/K，G/H/I/C 跳过——检查器终于能测自己）
 - **四处 twin 锚点**：触发即更新表（MAINTENANCE↔记忆库体系）、文件结构表（memory/README↔记忆库体系）；MAINTENANCE 头注加孪生声明（自包含 vs 单一权威的消解：保持双份 + 机器看守）
