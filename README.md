@@ -65,6 +65,19 @@ claude plugin install crules@crules-market --scope user
 | 老项目合并态 | **不能整删**（混有你的老规则）——对照 `.claude/memory/decisions/` 取舍记录与 `CLAUDE.md.bak.*` 备份逐段摘除 |
 | `.claude/memory/` 去留 | **删模板**（NAVIGATION / MAINTENANCE / README）；**留沉淀**（patterns / business-rules / INVARIANTS / decisions——那是你项目的知识，与 crules 去留无关）；indexes / .pending-updates 随手删 |
 
+### 恢复（对应上表停用方式）
+
+| 停用时做了 | 恢复命令 / 操作 |
+|---|---|
+| 仅 `disable` | `claude plugin enable crules@crules-market`（**完整形态**——纯名 `crules` 会 not found） |
+| `uninstall`（marketplace 还在） | `claude plugin install crules@crules-market --scope user` |
+| 连 `marketplace remove` | 三步：`claude plugin marketplace add <crules 仓库路径或 git URL> --scope user` → `install crules@crules-market --scope user` |
+| 轻装删了导入行 | 把 `@<crules 源>/CLAUDE.md` 导入行加回即恢复；若 CLAUDE.md 已无戳，重跑 `install.sh` 会被老项目护栏拦（手动补导入行+戳，或 `--force`） |
+| 完整模式删了文件 | 重跑 `bash <crules 源>/scripts/install.sh <项目根> --mode=full`（文件已删即按新装走） |
+| 老项目摘了条款 | 无机械恢复——对照 `decisions/` 取舍记录重走 `/crules:crules-init` 老项目分支 |
+
+> 恢复后验证：`bash <crules 源>/scripts/check-imports.sh <项目根>` 应报「✅ 导入可达 + ✅ 版本戳一致」。**注意**：enable / install 后**当前会话不生效**——hooks 与命令在新会话才装载，别在旧会话里验证。
+
 ### `/crules:crules-init` 会做什么（向导流程）
 
 交互式向导，**一步步问你，不是黑盒一键跑完；只动规则文件，不碰业务代码**。
