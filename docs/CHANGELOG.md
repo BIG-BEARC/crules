@@ -6,6 +6,10 @@
 
 ---
 
+## 08-27 · v75 跨仓绝对路径纪律（fork 侧 0.1.1 同步跟随，plugin 0.5.7）
+
+- **`CLAUDE.md` §三 实施纪律 +1 条**：「跨仓 / 跨目录操作一律绝对路径（cwd 会话间重置——实战 6 踩，曾致母版污染复位）+ 特殊字面串文件用专用写工具（防 deny-list 误拦）+ 跨仓收尾 git status 验零污染」——源：crules-flutter 批 2c 双坑复盘（需求方裁定母版跟随）
+
 ## 08-25 · v69 政策收敛治本——J/K 查 + fixture 模式（W1 收口，plugin 0.5.1，minor——0.5.0 后 J 查 docs 豁免补修再 bump，v71 补账）
 
 - **`scripts/check-consistency.sh`**：+**J 查**（孪生表断言——`<!-- twin:* -->` 锚点成对 + 数据行数一致，漂移即 CI 红；孪生双份从注释人肉同步升机器看守）+ **K 查**（政策声明归口——旧政策特征串「不进 git/整体 gitignore/纯本地」只许出现在 MAINTENANCE 政策表）+ **fixture 模式**（`CONSISTENCY_ROOT=<目录>` 对任意目录跑 A-F/J/K，G/H/I/C 跳过——检查器终于能测自己）
