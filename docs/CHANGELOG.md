@@ -6,6 +6,11 @@
 
 ---
 
+## 08-27 · v76 种子库定位声明 + fork-kit 沉淀（批 4，plugin 0.5.8）
+
+- **`README.md`**：技术栈关系段升级为**种子库模式声明**——crules=母版保持活跃，crules-flutter 已 fork 独立（链接+基线），crules-java 按需；deny-list 安全单一权威；`../flutter/` 标注为历史资产位置（已被 crules-flutter 仓库取代，不再更新）
+- **`docs/fork-kit.md` 新增**（维护资产）：技术栈 fork 操作手册——前提决策 / 批次结构 / 整合映射模板 / 基建件清单（含 skill 根级目录等实战坑）/ 验收门；**快照性质声明**（锚 ea4d25c，新 fork 须重跑覆盖 diff 禁直抄）
+
 ## 08-27 · v75 跨仓绝对路径纪律（fork 侧 0.1.1 同步跟随，plugin 0.5.7）
 
 - **`CLAUDE.md` §三 实施纪律 +1 条**：「跨仓 / 跨目录操作一律绝对路径（cwd 会话间重置——实战 6 踩，曾致母版污染复位）+ 特殊字面串文件用专用写工具（防 deny-list 误拦）+ 跨仓收尾 git status 验零污染」——源：crules-flutter 批 2c 双坑复盘（需求方裁定母版跟随）

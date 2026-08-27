@@ -1,8 +1,8 @@
 # crules
 
-一套**可直接复用**的项目协作规则模板——spec-kit + superpowers 的**通用约定层** + 技术栈目录（[`../flutter/`](../flutter/)，未来可加 `java/` 等）。核心原则**渐进增强**：核心规则零依赖、开箱即用；spec-kit / superpowers 桥接作为可选增强层。
+一套**可直接复用**的项目协作规则模板——spec-kit + superpowers 的**通用约定层**，同时是技术栈规则包的**种子库**（fork 出 `crules-flutter` 等，见下）。核心原则**渐进增强**：核心规则零依赖、开箱即用；spec-kit / superpowers 桥接作为可选增强层。
 
-> 与技术栈目录的关系：本包是**通用约定**（不限语言 / 框架的红线、流程、提交、审查）；技术栈专属内容（Flutter 角色、checklist、技术栈模板）在对应子目录，如 [`../flutter/`](../flutter/)。通用项目用本包，Flutter 项目用本包 + flutter/。
+> 与技术栈目录的关系：本包是**通用约定**（不限语言 / 框架的红线、流程、提交、审查）。**种子库模式（v76 定版）**：技术栈包从本包 **fork 后独立演进**——[`crules-flutter`](https://github.com/BIG-BEARC/crules-flutter)（fork 自基线 `v74-fork-base`，独立 plugin，Flutter 项目直接用它）已先行；后续 `crules-java` 等按需 fork（操作手册：[`docs/fork-kit.md`](docs/fork-kit.md)）。边界判据：与技术栈无关的协作改进在本包改（各 fork 按查表决定跟随）；**deny-list 安全修复永远在本包**（单一权威，fork 背单文件同步义务）。本目录 `../flutter/` 为 fork 前的历史资产位置，已被 crules-flutter 仓库取代（保留作历史参考，不再更新）。
 
 ---
 
@@ -87,7 +87,7 @@ claude plugin install crules@crules-market --scope user
 
 **新项目分支——三问 + 复制：**
 
-1. 问技术栈（Flutter → 提示同时装 [`../flutter/`](../flutter/)）
+1. 问技术栈（Flutter → 提示改装 [crules-flutter](https://github.com/BIG-BEARC/crules-flutter) 独立 plugin，本包面向通用/其他栈）
 2. 问安装模式：**轻装（默认）**——CLAUDE.md 仅数行 `@` 导入 + 覆写节，规则更新下次会话自动生效；**完整**——全量 cp（团队多机 / 高定制），更新须重跑本命令合并
 3. 引导填**附录 3 必填**（项目名 / 技术栈 / 构建·分析·测试命令——crules 的验证纪律靠它知道在你项目里该跑什么命令）
 
