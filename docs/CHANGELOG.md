@@ -6,6 +6,12 @@
 
 ---
 
+## 08-31 · v77 外部行为准则残差吸收（karpathy-guidelines，plugin 0.6.0）
+
+- **`CLAUDE.md` §三实施纪律 +3 条**（外部吸收：karpathy 四原则行为准则——Think Before Coding / Simplicity First / Surgical Changes / Goal-Driven Execution，[源帖](https://x.com/karpathy/status/2015883857489522876)；评估结论：与既有规则重叠 ~90%——双 Gate / 范围边界 / 最小改动 / 验证证据已覆盖且多为更强形态，仅吸收残差）：**假设显式化**（开工前列关键假设并标注已核实 / 推断）/ **更简方案推回**（更简路径提出而非擅自改，采纳归需求方裁决）/ **清理自身孤儿**（自身改动产生的失效 import / 变量 / 函数同批清，预存死代码只报告）——三条均显式绑定「守住范围边界」防纪律打架
+- **整包不吸收**：karpathy 自带「trivial 任务 use judgment」松弛条款与「信任档位仅凭显式声明生效」冲突；余量已被双 Gate + 证据 5 级结构性覆盖
+- **crules-flutter 侧不动**：按跟/不跟查表默认不跟，等稳定期 fork 自行决定（跟则 bump fork minor）
+
 ## 08-27 · v76 种子库定位声明 + fork-kit 沉淀（批 4，plugin 0.5.8）
 
 - **`README.md`**：技术栈关系段升级为**种子库模式声明**——crules=母版保持活跃，crules-flutter 已 fork 独立（链接+基线），crules-java 按需；deny-list 安全单一权威；`../flutter/` 标注为历史资产位置（已被 crules-flutter 仓库取代，不再更新）
